@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>MyPhysics</title>
+</head>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<body>
+<!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari">
+      <button id="searchBtn"><i class="fas fa-search"></i></button>
+    </div>
+    <button class="login-btn" id="loginBtn">Login</button>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="#" class="inpage"><i class="fas fa-home"></i> <span>Home</span></a>
+    <a href="#"><i style="font-weight: bolder;">ψ</i> <span>Penelitian</span></a>
+    <a href="#"><i class="fas fa-book"></i> <span>Topik</span></a>
+    <a href="#"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
+  </div>
+
+  <!-- Konten utama -->
+  <div class="main-content" id="mainContent">
+    <!-- Carousel Berita -->
+    <h2 style="margin-bottom: 15px;">Trend</h2>
+    <div class="carousel-container">
+      <button class="arrow left">&#10094;</button>
+      <div class="carousel" id="carousel">
+        <div class="card">
+          <img src="" alt="">
+          <div class="card-content">
+            <h3 class="truncate">Lorem Ipsum</h3>
+            <p class="truncate">Lorem ipsum dolor sit amet</p>
+            <div class="source">r/science</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="" alt="">
+          <div class="card-content">
+            <h3 class="truncate">Lorem Ipsum</h3>
+            <p class="truncate">Lorem ipsum dolor sit amet</p>
+            <div class="source">r/physics</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="" alt="">
+          <div class="card-content">
+            <h3 class="truncate">Lorem Ipsum</h3>
+            <p class="truncate">Lorem ipsum dolor sit amet</p>
+            <div class="source">r/space</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="" alt="">
+          <div class="card-content">
+            <h3 class="truncate">Lorem Ipsum</h3>
+            <p class="truncate">Lorem ipsum dolor sit amet</p>
+            <div class="source">r/energy</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="" alt="">
+          <div class="card-content">
+            <h3 class="truncate">Lorem Ipsum</h3>
+            <p class="truncate">Lorem ipsum dolor sit amet</p>
+            <div class="source">r/energy</div>
+          </div>
+        </div>
+      </div>
+      <button class="arrow right">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.querySelector('.search-bar input');
+
+    // Toggle sidebar
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('collapsed');
+    });
+
+    // Tombol search
+    searchBtn.addEventListener('click', () => {
+      alert('Mencari: ' + searchInput.value);
+    });
+
+    // Tombol login
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      alert('Fitur login belum diaktifkan.');
+    });
+  </script>
+  <script>
+  const carousel = document.getElementById('carousel');
+  const leftBtn = document.querySelector('.arrow.left');
+  const rightBtn = document.querySelector('.arrow.right');
+
+  leftBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: -320, behavior: 'smooth' });
+  });
+
+  rightBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: 320, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
