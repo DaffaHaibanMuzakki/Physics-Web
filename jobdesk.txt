@@ -1,0 +1,21 @@
+Aqiqiy : 
+Konten utama atau fitur utama dan unggulan ditampilkan
+Merancang Fitur AI -DL SENIN
+
+Hanis : 
+Front end 
+- Homepage web sesuatu standar 
+- Halaman Postingan 
+Postingan
+Pencarian
+Ceklis Keyword
+Trend postingan keyword
+- Halaman Membuat article
+- Halaman profiledan postingan
+- Halaman Login dan Sign Up
+
+Daffa : 
+Backend 
+Data structure dan CRUD -> Mongo model Mongo Scheme || Sabtu
+Autenkasi, login/logout ->  Minggu 
+Mengkoneksi Phyton datanya || Selasa

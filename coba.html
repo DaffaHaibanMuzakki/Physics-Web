@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap Navbar Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="/css/verify_otp.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  #editor { width: 100%; height: 150px; }
+  #preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; min-height: 50px; }
+  #toolbar button { margin: 2px; padding: 5px 10px; }
+  .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+  .modal-content { background-color: #fff; margin: 5% auto; padding: 20px; width: 500px; border-radius: 5px; }
+  .modal-content textarea { width: 100%; height: 120px; }
+  .modal-content #formula-preview { border: 1px solid #ccc; padding: 5px; margin-top: 5px; min-height: 50px; }
+</style>
+  </head>
+
+  
+
+
+  <body style="padding-top: 80px;background-image: url('/images/pexels-cookiecutter-1148820.jpg');background-size: cover;">
+    
+    <section>
+        <div class="container container-form  px-3 py-4 my-4">
+   <form method="POST" action="/createpost" enctype="multipart/form-data" >
+  <h2 class="text-center mb-4" style="color: #ccc;">Create Post</h2>
+
+  <div class="mb-3">
+    <label style="color: #ccc;">Title</label>
+    <input name="title" class="form-control text-center" placeholder="Enter title" required>
+  </div>
+
+  <div class="mb-3">
+    <label style="color: #ccc;">Caption</label>
+    <textarea name="caption" class="form-control text-center" placeholder="Enter caption"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label style="color: #ccc;">Image</label>
+    <input name="image" type="file" class="form-control" accept="image/*" required>
+  </div>
+
+  <button class="btn btn-primary w-100" type="submit">Post</button>
+</form>
+
+
+      </section>
+      
+<!-- 
+    <script>
+        function imageHandler() {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'quill_upload'); 
+      try {
+        const res = await fetch('https://api.cloudinary.com/v1_1/dfyvw9s66/image/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', data.secure_url);
+      } catch (err) {
+        console.error('Upload error:', err);
+      }
+    };
+  }
+    </script> -->
+   
+
+    <h1>Forum Editor</h1>
+
+<textarea id="editor" placeholder="Tulis konten utama di sini..."></textarea>
+
+<br>
+<button onclick="openFormulaModal()">Insert Formula</button>
+
+<h3>Preview Konten Utama:</h3>
+<div id="preview"></div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h3>Formula Editor</h3>
+    <div id="formula-toolbar">
+       <!-- Matematika Dasar -->
+      <button onclick="insertFormulaSymbol('\\int_{a}^{b} f(x) \\, dx')">∫ Integral</button>
+      <button onclick="insertFormulaSymbol('\\oint f(x) \\, dx')">∮ Loop Integral</button>
+      <button onclick="insertFormulaSymbol('\\iint f(x,y) \\, dx dy')">∬ Surface Integral</button>
+      <button onclick="insertFormulaSymbol('\\\\iiint f(x,y,z) \\, dx dy dz')">∭ Volume Integral</button>
+      <button onclick="insertFormulaSymbol('\\\\sum_{n=1}^{\\\\infty} n')">Σ Sum</button>
+      <button onclick="insertFormulaSymbol('\\\\prod_{i=1}^{N} i')">Π Product</button>
+      <button onclick="insertFormulaSymbol('\\\\frac{a}{b}')">Fraction</button>
+      <button onclick="insertFormulaSymbol('\\\\sqrt{x}')">√ Sqrt</button>
+      <button onclick="insertFormulaSymbol('\\\\left( ... \\\\right)')">(Brackets)</button>
+      <button onclick="insertFormulaSymbol('\\\\left| ... \\\\right|')">|Absolute|</button>
+      <button onclick="insertFormulaSymbol('x_i')">Subscript</button>
+      <button onclick="insertFormulaSymbol('x^i')">Superscript</button>
+      <button onclick="insertFormulaSymbol('\\\\lim_{x\\\\to0}')">lim</button>
+      <button onclick="insertFormulaSymbol('\\\\frac{d}{dx}')">d/dx</button>
+      <button onclick="insertFormulaSymbol('\\\\frac{\\\\partial}{\\\\partial x}')">∂/∂x</button>
+
+      <!-- Greek Letters -->
+      <button onclick="insertFormulaSymbol('\\alpha')">α</button>
+      <button onclick="insertFormulaSymbol('\\beta')">β</button>
+      <button onclick="insertFormulaSymbol('\\gamma')">γ</button>
+      <button onclick="insertFormulaSymbol('\\delta')">δ</button>
+      <button onclick="insertFormulaSymbol('\\epsilon')">ε</button>
+      <button onclick="insertFormulaSymbol('\\theta')">θ</button>
+      <button onclick="insertFormulaSymbol('\\lambda')">λ</button>
+      <button onclick="insertFormulaSymbol('\\mu')">μ</button>
+      <button onclick="insertFormulaSymbol('\\pi')">π</button>
+      <button onclick="insertFormulaSymbol('\\sigma')">σ</button>
+      <button onclick="insertFormulaSymbol('\\phi')">φ</button>
+      <button onclick="insertFormulaSymbol('\\psi')">ψ</button>
+      <button onclick="insertFormulaSymbol('\\Omega')">Ω</button>
+
+      <!-- Vektor & Operator Fisika -->
+      <button onclick="insertFormulaSymbol('\\\\vec{v}')">Vector</button>
+      <button onclick="insertFormulaSymbol('\\\\mathbf{F}')">Bold F</button>
+      <button onclick="insertFormulaSymbol('\\\\hat{i}')">Unit i</button>
+      <button onclick="insertFormulaSymbol('\\\\hat{r}')">Unit r</button>
+      <button onclick="insertFormulaSymbol('\\\\dot{x}')">ẋ</button>
+      <button onclick="insertFormulaSymbol('\\\\ddot{x}')">ẍ</button>
+      <button onclick="insertFormulaSymbol('\\\\infty')">∞</button>
+      <button onclick="insertFormulaSymbol('^\\\\circ')">° Degree</button>
+
+      <!-- Constants -->
+      <button onclick="insertFormulaSymbol('\\\\hbar')">ℏ</button>
+      <button onclick="insertFormulaSymbol('\\\\varepsilon_0')">ε₀</button>
+      <button onclick="insertFormulaSymbol('\\\\mu_0')">μ₀</button>
+    </div>
+    <textarea id="formula-editor" placeholder="Tulis rumus di sini..."></textarea>
+    <div id="formula-preview"></div>
+    <button onclick="insertFormulaToEditor()">Done</button>
+    <button onclick="closeFormulaModal()">Cancel</button>
+  </div>
+</div>
+
+    <script>
+const editor = document.getElementById('editor');
+const preview = document.getElementById('preview');
+const modal = document.getElementById('modal');
+const formulaEditor = document.getElementById('formula-editor');
+const formulaPreview = document.getElementById('formula-preview');
+
+// Render preview utama
+function renderMainPreview() {
+  // wrap dengan $$ agar MathJax merender semua formula
+  preview.innerHTML = editor.value.replace(/(\$\$.*?\$\$)/gs, (m) => m);
+  MathJax.typesetPromise([preview]);
+}
+
+// Modal functions
+function openFormulaModal(){
+  modal.style.display = 'block';
+  formulaEditor.value = '';
+  formulaPreview.innerHTML = '';
+}
+function closeFormulaModal(){
+  modal.style.display = 'none';
+}
+
+// Toolbar insert simbol di formula editor
+function insertFormulaSymbol(latex){
+  const start = formulaEditor.selectionStart;
+  const end = formulaEditor.selectionEnd;
+  const val = formulaEditor.value;
+  formulaEditor.value = val.slice(0,start) + latex + val.slice(end);
+  formulaEditor.focus();
+  formulaEditor.selectionStart = formulaEditor.selectionEnd = start + latex.length;
+  renderFormulaPreview();
+}
+
+// Preview formula
+function renderFormulaPreview(){
+  formulaPreview.innerHTML = `$$${formulaEditor.value}$$`;
+  MathJax.typesetPromise([formulaPreview]);
+}
+
+// Update formula preview saat mengetik
+formulaEditor.addEventListener('input', renderFormulaPreview);
+
+// Insert hasil formula ke editor utama sebagai satu blok
+function insertFormulaToEditor(){
+  const formula = formulaEditor.value;
+  if(formula.trim() !== ''){
+    editor.value += `\n$$${formula}$$\n`; // wrap dengan $$ agar MathJax merender
+    renderMainPreview();
+    closeFormulaModal();
+  }
+}
+
+// Update preview utama saat mengetik
+editor.addEventListener('input', renderMainPreview);
+renderMainPreview();
+</script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
+    
+
+
+
+    

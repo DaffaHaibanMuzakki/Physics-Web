@@ -1,0 +1,6 @@
+daffamuzakki_db_user
+
+96JJVJuYh9OJtyGU
+
+
+mongodb+srv://daffamuzakki_db_user:96JJVJuYh9OJtyGU@cluster0.wimkgts.mongodb.net/
