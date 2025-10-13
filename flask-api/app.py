@@ -17,13 +17,13 @@ except:
 MODEL_PATH = 'models/model_classifier.pkl'
 VECTORIZER_PATH = 'models/vectorizer.pkl'
 
-print("🔄 Loading model...")
+print(" Loading model...")
 try:
     model = joblib.load(MODEL_PATH)
     vectorizer = joblib.load(VECTORIZER_PATH)
-    print("✅ Model loaded successfully!")
+    print(" Model loaded successfully!")
 except Exception as e:
-    print(f"❌ Error loading model: {e}")
+    print(f" Error loading model: {e}")
     model = None
     vectorizer = None
 
@@ -172,10 +172,10 @@ def classify_batch():
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("🚀 Forum Fisika AI API Starting...")
+    print(" Forum Fisika AI API Starting...")
     print("="*60)
-    print("📍 Server: http://localhost:5000")
-    print("📚 Endpoints:")
+    print(" Server: http://localhost:5000")
+    print(" Endpoints:")
     print("   GET  /           - Health check")
     print("   POST /classify   - Classify single text")
     print("   POST /classify/batch - Classify multiple texts")
