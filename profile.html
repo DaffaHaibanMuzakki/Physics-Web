@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet"/>
+  <link href="profile.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="asset/favicon.png">
+  <title>MyPhysics - Profile</title>
+</head>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<body>
+<!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari..." id="searchInput">
+      <button id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <button class="login-btn" id="loginBtn">Login</button>
+  </div>
+  <!-- 🔍 Fullscreen Search Overlay -->
+  <div class="search-fullscreen" id="searchFullscreen">
+    <div class="search-header">
+      <button id="closeSearch"><i class="fa-solid fa-arrow-left"></i></button>
+      <input type="text" id="searchInputFull" placeholder="Telusuri..." autofocus>
+    </div>
+    <div class="search-content" id="searchContent">
+      <!-- Hasil pencarian atau riwayat akan muncul di sini -->
+    </div>
+  </div>
+  <!--Main-->
+  <div class="container" role="main">
+    <section class="profile-top">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <img src="" alt="Foto profil" />
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <div class="top-row">
+          <div class="user-name">
+            <h1>NamaPengguna_123</h1>
+            <div class="muted">· Verified</div>
+          </div>
+
+
+        </div>
+
+        <div class="stats" aria-hidden="false">
+          <div class="stat">
+            <strong id="postsCount">48</strong>
+            <span class="muted">Postingan</span>
+          </div>
+
+          <div class="stat">
+            <strong id="followersCount">3.4k</strong>
+            <span class="muted">Pengikut</span>
+          </div>
+
+          <div class="stat">
+            <strong id="followingCount">289</strong>
+            <span class="muted">Mengikuti</span>
+          </div>
+        </div>
+
+        <p class="bio" id="bioText">Halo! Saya pembuat konten sains. Membagikan eksperimen sederhana, tips kuliah, dan dokumentasi lab. Konten dibuat untuk tujuan edukasi dan referensi.</p>
+        <div>
+          <div class="btns">
+            <button class="btn">Edit Profil</button>
+            <button class="btn">Message</button>
+            <button class="btn follow" id="followBtn">Follow</button>
+            <button class="btn"><i class="fa-solid fa-gear"></i></button>
+          </div>          
+        </div>
+      </div>
+    </section>
+
+    <section class="posts-area">
+      <div class="posts-add">
+        <h2>Postingan</h2>
+        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+      </div>
+
+      <div class="post-feed">
+        <div class="post-card"> 
+          <div class="post-c-content">
+            <img src="asset/sample1.jpg" alt="Gambar Post" class="post-image">
+
+            <div class="post-content">
+              <h3 class="post-title">Lorem ipsum dolor sit amet</h3>
+              <p class="post-caption">
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
+              <div class="post-meta">
+                <span class="post-category"><i class="fa-solid fa-tag"></i> keyword</span>
+                <span class="post-date"><i class="fa-regular fa-calendar"></i> Tanggal </span>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="post-actions">
+            <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
+            <button><i class="fa-regular fa-comment"></i> 12</button>
+            <button><i class="fa-solid fa-share"></i> Bagikan</button>
+            <button><i class="fa-solid fa-trash" style="color: #d10000;"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+  const searchBar = document.querySelector('.search-bar');
+  const searchToggle = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
+
+  searchToggle.addEventListener('click', () => {
+    // Kalau input belum aktif, buka dulu
+    if (!searchBar.classList.contains('active')) {
+      searchBar.classList.add('active');
+      searchInput.focus();
+    } else {
+      // Kalau sudah aktif dan ada teks, lakukan pencarian
+      if (searchInput.value.trim() !== "") {
+        // Ganti bagian ini dengan fungsi pencarian kamu
+        console.log("Mencari:", searchInput.value);
+      } else {
+        // Jika kosong, sembunyikan kembali
+        searchBar.classList.remove('active');
+      }
+    }
+  });
+</script>
+<script>
+  const searchFullscreen = document.getElementById('searchFullscreen');
+  const closeSearch = document.getElementById('closeSearch');
+  const searchInputFull = document.getElementById('searchInputFull');
+  const searchContent = document.getElementById('searchContent');
+
+  // buka halaman pencarian
+  searchToggle.addEventListener('click', () => {
+    searchFullscreen.classList.add('active');
+    searchInputFull.focus();
+  });
+
+  // tutup halaman pencarian
+  closeSearch.addEventListener('click', () => {
+    searchFullscreen.classList.remove('active');
+    searchInputFull.value = "";
+    searchContent.innerHTML = "";
+  });
+
+  // tekan Enter → tampilkan hasil pencarian
+  searchInputFull.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const q = searchInputFull.value.trim();
+      if (q) {
+        searchContent.innerHTML = `
+          <p>Mencari: <strong>${q}</strong></p>
+          <p>🔍 Hasil pencarian akan ditampilkan di sini.</p>
+        `;
+      }
+    }
+  });
+</script>
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainContent = document.getElementById('mainContent');
+    const searchBtn = document.getElementById('searchBtn');
+
+    // Tombol search
+    searchBtn.addEventListener('click', () => {
+      alert('Mencari: ' + searchInput.value);
+    });
+
+    // Tombol login
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      alert('Fitur login belum diaktifkan.');
+    });
+  </script>
+  <script>
+  const carousel = document.getElementById('carousel');
+  const leftBtn = document.querySelector('.arrow.left');
+  const rightBtn = document.querySelector('.arrow.right');
+
+  leftBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: -320, behavior: 'smooth' });
+  });
+
+  rightBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: 320, behavior: 'smooth' });
+  });
+</script>
+  <script>
+    // interaksi sederhana follow
+    const followBtn = document.getElementById('followBtn');
+    let following = false;
+    followBtn.addEventListener('click', ()=>{
+      following = !following;
+      followBtn.textContent = following? 'Following' : 'Follow';
+      followBtn.classList.toggle('follow');
+    });
+
+    // contoh: kalau mau mengganti isi (jumlah/postingan/bio) dari JS
+    // document.getElementById('postsCount').textContent = 52;
+    // document.getElementById('followersCount').textContent = '3.5k';
+    // document.getElementById('bioText').textContent = 'Bio baru...';
+  </script>
+</body>
+</html>

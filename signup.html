@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet"/>
+  <link href="login-signup.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="asset/favicon.png">
+  <title>MyPhysics - Signup</title>
+</head>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<body>
+<!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
+    </div>
+  </div>
+
+  <!-- SIGNUP SECTION -->
+  <div class="auth-container">
+    <div class="auth-box">
+      <h2>Buat Akun <span style="color: var(--color-5);">MyPhysics</span></h2>
+      <p class="auth-subtext">Sudah punya akun? <a href="login.html">Masuk</a></p>
+
+      <form action="#" method="post" class="auth-form">
+        <div class="input-group">
+          <label for="username"><i class="fa-solid fa-user"></i></label>
+          <input type="text" id="username" name="username" placeholder="Nama pengguna" required>
+        </div>
+
+        <div class="input-group">
+          <label for="email"><i class="fa-solid fa-envelope"></i></label>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+
+        <div class="input-group">
+          <label for="password"><i class="fa-solid fa-lock"></i></label>
+          <input type="password" id="password" name="password" placeholder="Kata sandi" required>
+          <button type="button" class="toggle-password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+
+        <button type="submit" class="auth-btn">Daftar</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+document.querySelectorAll('.toggle-password').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const input = btn.closest('.input-group').querySelector('input');
+    const icon = btn.querySelector('i');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+    // pastikan tetap putih meski ada efek lain
+    icon.style.color = '#fff';
+  });
+});
+</script>
+</body>
+</html>

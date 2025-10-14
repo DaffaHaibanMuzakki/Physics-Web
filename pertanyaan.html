@@ -6,7 +6,7 @@
   <link href="style.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="asset/favicon.png">
-  <title>MyPhysics</title>
+  <title>MyPhysics - Pertanyaan</title>
 </head>
 
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -22,7 +22,7 @@
       <input type="text" placeholder="Cari..." id="searchInput">
       <button id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
-    <button class="login-btn" id="loginBtn"><a href="login.html">Login</a></button>
+    <button class="login-btn" id="loginBtn">Login</button>
   </div>
   <!-- 🔍 Fullscreen Search Overlay -->
   <div class="search-fullscreen" id="searchFullscreen">
@@ -37,66 +37,14 @@
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
-    <a href="#" class="inpage"><i class="fas fa-home"></i> <span>Home</span></a>
+    <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
     <a href="penelitian.html"><i style="font-weight: bolder;">ψ</i> <span>Penelitian</span></a>
     <a href="topik.html"><i class="fas fa-book"></i> <span>Topik</span></a>
-    <a href="pertanyaan.html"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
+    <a href="#" class="inpage"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
   </div>
 
   <!-- Konten utama -->
   <div class="main-content" id="mainContent">
-    <!-- Carousel Berita -->
-    <h2 style="margin-bottom: 15px;">Trend</h2>
-    <div class="carousel-container">
-      <button class="arrow left">&#10094;</button>
-      <div class="carousel" id="carousel">
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-      </div>
-      <button class="arrow right">&#10095;</button>
-    </div>
     <!-- Tombol Filter -->
     <button id="filterToggleBtn" class="filter-toggle">
       <i class="fa-solid fa-sliders"></i>
@@ -112,16 +60,6 @@
           <option value="terbaru">Terbaru</option>
           <option value="terlama">Terlama</option>
           <option value="like">Like Terbanyak</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Kategori:</label>
-        <select id="sortSelect">
-          <option value="semua">Semua</option>
-          <option value="penelitian">Penelitian</option>
-          <option value="topik">Topik</option>
-          <option value="pertanyaan">Pertanyaan</option>
         </select>
       </div>
 

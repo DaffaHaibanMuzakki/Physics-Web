@@ -18,7 +18,8 @@ body {
     --color-1: #272727;
     --color-2: #0f0f0f;
     --color-3: #e1e1e1;
-    --color-4: #2f2f2f;        
+    --color-4: #2f2f2f; 
+    --color-5: #00b4d8;       
 }
 
 /* Navbar */
@@ -77,6 +78,11 @@ body {
     transition: 0.3s;
 }
 
+.navbar .login-btn a {
+  text-decoration: none;
+  color: var(--color-3);
+}
+
 /* Search bar */
 .search-bar {
     display: flex;
@@ -88,6 +94,7 @@ body {
 
 .search-bar input[type="text"] {
     background-color: var(--color-2);
+    color: var(--color-3);
     width: 100%;
     padding: 6px 10px;
     border-radius: 10px 0 0 10px;
@@ -106,6 +113,88 @@ body {
     cursor: pointer;
 }
 
+
+
+@media (max-width: 600px) {
+  .search-bar {
+    margin-left: auto;
+    max-width: 30px;
+  }
+
+  .search-bar input {
+    display: none;
+  }
+
+  .search-bar.active input {
+    width: 140px;
+    opacity: 1;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+  }
+
+  .search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+}
+
+/* 🔍 Fullscreen Search Overlay */
+.search-fullscreen {
+  position: fixed;
+  inset: 0;
+  background-color: #111;
+  color: white;
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.search-fullscreen.active {
+  display: flex;
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #222;
+}
+
+.search-header input {
+  flex: 1;
+  padding: 8px 12px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 20px;
+  background: #333;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.search-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* Animasi masuk */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Sidebar */
 .sidebar {
     background-color: var(--color-2);
@@ -122,6 +211,7 @@ body {
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: width 0.3s ease;
     overflow: hidden;
+    z-index: 50;
 }
 
 .sidebar.collapsed {
@@ -277,6 +367,362 @@ body {
     text-overflow: ellipsis;    /* ganti teks terpotong dengan “…” */
 }
 
+/* ===== FEED POST ===== */
+.post-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* Card post */
+.post-card {
+  background-color: var(--color-2);
+  border-bottom: 1px solid var(--color-1);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.post-card:hover {
+    background-color: var(--color-4);
+    cursor: pointer;
+}
+
+/* Header (orang + titik tiga) */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-weight: bold;
+  color: var(--color-3);
+}
+
+.menu-icon {
+  cursor: pointer;
+  color: var(--color-3);
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.menu-icon:hover {
+  background-color: var(--color-1);
+}
+
+.post-c-content {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+}
+
+/* Gambar utama */
+.post-image {
+    min-width: 200px;
+  object-fit: cover;
+  aspect-ratio: 5/3;
+}
+
+/* Isi post */
+.post-content {
+  padding: 15px 18px;
+}
+
+.post-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--color-3);
+  margin-bottom: 6px;
+}
+
+.post-caption {
+  font-size: 0.9em;
+  color: var(--color-3);
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+.post-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+/* Tombol interaksi bawah */
+.post-actions {
+    justify-content: end;
+  display: flex;
+  align-items: center;
+  padding: 10px 0 12px;
+}
+
+.post-actions button {
+    margin: 0px 25px 0px 0px;
+  background: none;
+  border: none;
+  color: var(--color-3);
+  cursor: pointer;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.post-actions button:hover {
+  color: var(--color-5);
+}
+
+/* menu titik tiga */
+.post-menu {
+  position: relative;
+}
+
+.post-menu i {
+  cursor: pointer;
+  color: #aaa;
+}
+
+.post-menu:hover .post-dropdown {
+  display: block;
+}
+
+.post-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 20px;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 5px 0;
+  min-width: 100px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.post-dropdown a {
+  display: block;
+  padding: 8px 12px;
+  color: var(--color-3);
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.post-dropdown a:hover {
+  background-color: var(--color-1);
+}
+
+/* Efek tombol love */
+.like-btn.liked i {
+  color: #e74c3c;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .post-c-content {
+        flex-direction: column;
+    }
+    .post-image {
+        height: 200px;
+    }
+    .post-title {
+        font-size: 1em;
+    }
+}
+
+/* Tombol Toggle Filter */
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border: 0.5px solid var(--color-1);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95em;
+  transition: 0.3s ease;
+}
+
+.filter-toggle:hover {
+  background-color: var(--color-5);
+}
+
+.filter-toggle i {
+  font-size: 1em;
+}
+
+/* Panel Filter */
+.filter-bar {
+    position: relative;
+  display: none;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: scaleY(0.95);
+  transform-origin: top;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Saat aktif (tampil) */
+.filter-bar.show {
+  display: flex;
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-3);
+  font-size: 0.9em;
+}
+
+.filter-bar select {
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+/* Tombol Terapkan */
+.filter-bar button {
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border: 0.5px solid var(--color-1);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.filter-bar button:hover {
+  background-color: var(--color-5);
+}
+
+/* Dropdown kategori */
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 20;
+}
+
+#keywordSearch {
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  padding: 6px 8px;
+  border-radius: 6px;
+  width: 180px;
+  font-size: 0.9em;
+}
+
+.dropdown-list {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 6px;
+  width: 180px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 25;
+}
+
+.dropdown-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-list::-webkit-scrollbar-track {
+  background: var(--color-2);
+  border-radius: 10px;
+}
+
+.dropdown-list::-webkit-scrollbar-thumb {
+  background: var(--color-4);
+  border-radius: 10px;
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: var(--color-3);
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-1);
+}
+
+.dropdown-item.active {
+  background-color: var(--color-5);
+  color: var(--color-3);
+}
+
+/* buka dropdown saat fokus */
+.custom-dropdown:focus-within .dropdown-list {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  #keywordSearch, .dropdown-list {
+    width: 100%;
+  }
+  #sortSelect {
+    width: 150px;
+  }
+  .custom-dropdown {
+    width: 150px;
+  }
+  #timeSelect {
+    width: 150px;
+  }
+}
+
+
 
 /* ======== MOBILE MODE ======== */
 @media (max-width: 768px) {
@@ -313,6 +759,7 @@ body {
     .main-content {
         margin-left: 0;
         margin-bottom: 60px; /* beri ruang untuk sidebar bawah */
+        padding-bottom: 65px;
     }
 
     .sidebar.collapsed {
