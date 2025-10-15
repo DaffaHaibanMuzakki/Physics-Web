@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo Komentar & Balasan</title>
+<style>
+  body {
+    background: #111;
+    color: #eee;
+    font-family: system-ui, sans-serif;
+    max-width: 700px;
+    margin: 30px auto;
+  }
+  h2 {
+    color: #0af;
+  }
+  .comment {
+    border: 1px solid #333;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+  .reply {
+    margin-left: 30px;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: #222;
+    color: #eee;
+  }
+  button {
+    background: #0af;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #09f;
+  }
+</style>
+</head>
+<body>
+<h2>Komentar Artikel</h2>
+
+<div>
+  <input id="author" placeholder="Nama...">
+  <textarea id="text" placeholder="Tulis komentar..."></textarea>
+  <button onclick="addComment()">Kirim</button>
+</div>
+
+<div id="comments"></div>
+
+<script>
+let comments = []; // data sementara
+
+function renderComments() {
+  const tree = buildTree(comments);
+  document.getElementById("comments").innerHTML = renderTree(tree);
+}
+
+function buildTree(list) {
+  const map = {};
+  list.forEach(c => map[c.id] = { ...c, replies: [] });
+  const roots = [];
+  list.forEach(c => {
+    if (c.parentId) map[c.parentId]?.replies.push(map[c.id]);
+    else roots.push(map[c.id]);
+  });
+  return roots;
+}
+
+function renderTree(list) {
+  return list.map(c => `
+    <div class="comment">
+      <b>${c.author}</b><br>
+      <p>${c.text}</p>
+      <button onclick="toggleReply('${c.id}')">Balas</button>
+      <div id="reply-${c.id}" style="display:none;">
+        <input id="author-${c.id}" placeholder="Nama...">
+        <textarea id="text-${c.id}" placeholder="Balasan..."></textarea>
+        <button onclick="addReply('${c.id}')">Kirim Balasan</button>
+      </div>
+      <div class="reply">${renderTree(c.replies)}</div>
+    </div>
+  `).join('');
+}
+
+function toggleReply(id) {
+  const el = document.getElementById(`reply-${id}`);
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+
+function addComment() {
+  const author = document.getElementById("author").value.trim();
+  const text = document.getElementById("text").value.trim();
+  if (!author || !text) return alert("Nama dan komentar harus diisi!");
+  comments.push({ id: Date.now().toString(), author, text, parentId: null });
+  document.getElementById("author").value = "";
+  document.getElementById("text").value = "";
+  renderComments();
+}
+
+function addReply(parentId) {
+  const author = document.getElementById(`author-${parentId}`).value.trim();
+  const text = document.getElementById(`text-${parentId}`).value.trim();
+  if (!author || !text) return alert("Nama dan balasan harus diisi!");
+  comments.push({ id: Date.now().toString(), author, text, parentId });
+  renderComments();
+}
+
+renderComments();
+</script>
+</body>
+</html>

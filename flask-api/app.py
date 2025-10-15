@@ -5,6 +5,8 @@ import re
 import nltk
 from nltk.corpus import stopwords
 import os
+import requests
+
 
 app = Flask(__name__)
 CORS(app)
@@ -174,7 +176,7 @@ if __name__ == '__main__':
     print("\n" + "="*60)
     print(" Forum Fisika AI API Starting...")
     print("="*60)
-    print(" Server: http://localhost:5000")
+    print(" Server: http://localhost:3000")
     print(" Endpoints:")
     print("   GET  /           - Health check")
     print("   POST /classify   - Classify single text")
@@ -182,3 +184,12 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+
+
+
+response = requests.post('http://localhost:3000/classify', json={
+    'text': 'Apakah gaya listrik sama dengan gaya magnet?'
+})
+
+print(response.json())

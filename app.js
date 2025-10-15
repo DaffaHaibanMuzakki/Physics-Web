@@ -12,7 +12,8 @@ const path = require('path');                // Modul untuk mengatur path direkt
 // ======================================================
 // 🧮 3. DATABASE DAN MODEL
 // ======================================================
-const mongoose  = require('mongoose');        // Koneksi & pengelolaan database MongoDB
+const mongoose = require('mongoose');
+const { isValidObjectId } = mongoose;    // Koneksi & pengelolaan database MongoDB
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://daffamuzakki_db_user:96JJVJuYh9OJtyGU@cluster0.wimkgts.mongodb.net/',{
 }).then(() => console.log('✅ Database connected')).catch(err => console.error('❌ Database connection error:', err));
@@ -32,7 +33,7 @@ const Otp = require('./Scheme/OtpData.js');
 const cloudinary = require('cloudinary').v2;         // Layanan penyimpanan media berbasis cloud
 const { CloudinaryStorage } = require('multer-storage-cloudinary'); // Integrasi multer → cloudinary
 const multer = require('multer');                    // Middleware untuk upload file (gambar/video)
-
+const { promisify } = require('util');
 // ======================================================
 // 🔐 5. KEAMANAN & AUTENTIKASI
 // ======================================================
@@ -51,13 +52,52 @@ const otpGenerator = require('otp-generator');       // Membuat kode OTP acak un
 // 🧩 7. PARSING & MANIPULASI DATA
 // ======================================================
 const cheerio = require('cheerio');                  // Manipulasi/membaca HTML di sisi server (untuk scraping)
-
-
+const axios = require('axios');
 
 // ======================================================
 // 🧩 8. FUNGSI-FUNGSI 
 // ======================================================
 require('dotenv').config();
+
+// Fungsi promisify upload_stream
+const streamUpload = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'my_images' },
+      (error, result) => {
+        if (result) resolve(result);
+        else reject(error);
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
+
+
+function extractKeywords(text) {
+
+  // List kata kunci fisika (dapat diperluas)
+
+  const physicsKeywords = [
+
+    'gravitasi', 'energi', 'momentum', 'gaya', 'massa', 'percepatan',
+
+    'kecepatan', 'gelombang', 'partikel', 'atom', 'elektron', 'proton',
+
+    'neutron', 'medan', 'magnet', 'listrik', 'termodinamika', 'mekanika',
+
+    'kuantum', 'relativitas', 'radiasi', 'frekuensi', 'amplitudo',
+
+    'konservasi', 'hukum', 'newton', 'einstein', 'fisika'
+
+  ];
+
+  const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+  const found = words.filter(word => physicsKeywords.includes(word));
+
+  return [...new Set(found)]; // Remove duplicates
+}
+
 
 
 async function seedData() {
@@ -166,6 +206,19 @@ function requireLogin(req, res, next) {
   next();
 }
 
+async function classifyText(caption) {
+  try {
+    const response = await axios.post('http://localhost:5000/classify', {
+      text: caption
+    });
+    return response.data
+  } catch (error) {
+    return error.response ? error.response.data : error.message
+  }
+}
+
+
+
 // seedData()
 
 // ======================================================
@@ -218,6 +271,10 @@ const transporter = nodemailer.createTransport({
     pass: "xwnu kzus mzji clrj",
   },
 });
+
+
+
+
 
 
 
@@ -411,6 +468,139 @@ app.post('/verify_otp', async function (req, res) {
 
 
 
+app.get('/delete_update', async (req, res) => {
+ res.render("delete_update");
+});
+
+
+app.get('/editpost/:id', async (req, res) => {
+
+  try {
+    //68ea7012074ee2a71af21759
+    // 1. Cek apakah user sudah login
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized: Please login first');
+    }
+    const postId = req.params.id;
+    // 2. Cek ID valid
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send('Invalid post ID');
+    }
+    // 3. Ambil post dari database
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+
+    // console.log("Ini Post authornya 😂");
+    // console.log(post.author.toString() );
+    // console.log("Iniauthornya 😂");
+    // console.log(req.session.userId);
+    
+
+    // 4. Bandingkan ID author dan ID user dari session
+    if (post.author.toString() !== req.session.userId) {
+      return res.status(403).send('Forbidden: You are not the author of this post');
+    };
+
+    
+
+    res.render('editsection', {post});
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.post('/editpost/:id', async (req, res) => {
+  
+  try {
+    //68ea7012074ee2a71af21759
+    // 1. Cek apakah user sudah login
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized: Please login first');
+    }
+    const postId = req.params.id;
+    // 2. Cek ID valid
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send('Invalid post ID');
+    }
+    // 3. Ambil post dari database
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+
+    // console.log("Ini Post authornya 😂");
+    // console.log(post.author.toString() );
+    // console.log("Iniauthornya 😂");
+    // console.log(req.session.userId);
+    
+
+    // 4. Bandingkan ID author dan ID user dari session
+    if (post.author.toString() !== req.session.userId) {
+      return res.status(403).send('Forbidden: You are not the author of this post');
+    }
+
+    const updatedData = {
+      title: req.body.title,
+      caption: req.body.caption,
+      updatedAt: new Date()
+    };
+
+    const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+
+    res.send("Berhasil datanya diupdate")
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.post('/deletepost/:id', async (req, res) => {
+  try {
+    //68ea7012074ee2a71af21759
+    // 1. Cek apakah user sudah login
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized: Please login first');
+    }
+
+    const postId = req.params.id;
+
+    // 2. Cek ID valid
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send('Invalid post ID');
+    }
+
+    // 3. Ambil post dari database
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+
+    // console.log("Ini Post authornya 😂");
+    // console.log(post.author.toString() );
+    // console.log("Iniauthornya 😂");
+    // console.log(req.session.userId);
+    
+
+    // 4. Bandingkan ID author dan ID user dari session
+    if (post.author.toString() !== req.session.userId) {
+      return res.status(403).send('Forbidden: You are not the author of this post');
+    }
+
+    // 5. Hapus post
+    await Post.findByIdAndDelete(postId);
+
+    res.send('Post deleted successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+
 
 app.get('/createpost',requireLogin, async(req,res) => {
 
@@ -418,21 +608,8 @@ app.get('/createpost',requireLogin, async(req,res) => {
 res.render("createpost") ; 
 })
 
-const { promisify } = require('util');
 
-// Fungsi promisify upload_stream
-const streamUpload = (fileBuffer) => {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      { folder: 'my_images' },
-      (error, result) => {
-        if (result) resolve(result);
-        else reject(error);
-      }
-    );
-    stream.end(fileBuffer);
-  });
-};
+
 
 app.post('/createpost',requireLogin, upload.single('image'), async (req, res) => {
   try {
@@ -452,17 +629,22 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
       console.log("✅ Gambar berhasil diupload:", imageUrl);
     }
 
-    console.log("ini sessionnya");
-    console.log(req.session.userId);
-    
+
+
+    //Olah data dengan AI Python
+    let category = await classifyText(req.body.caption);
+
+    // Kategorikan keyword
+    let keyword = extractKeywords(req.body.caption); 
+
     // Buat post
   const newPost = await Post.create({
   title: req.body.title,
   caption: req.body.caption,
   author: req.session.userId, // harus ObjectId user yang valid
-  image: "https://res.cloudinary.com/demo/image/upload/sample.jpg", // bisa pakai URL dummy
-  keywords: ["testing", "dummy"], // array of string
-  category: "Teknologi",          // string, bukan array
+  image: imageUrl, // bisa pakai URL dummy
+  keywords: keyword , // array of string
+  category: category.prediction,          // string, bukan array
   references: [
     { title: "Referensi 1", url: "https://contoh.com/1" },
     { title: "Referensi 2", url: "https://contoh.com/2" }
@@ -478,6 +660,46 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
     res.status(500).send("Terjadi kesalahan pada server.");
   }
 });
+
+app.get('/search', async (req, res) => {
+  const query = req.query.q; // ambil parameter ?q=...
+  
+  try {
+    let post = [];
+    if (query) {
+      // cari yang judul atau caption-nya mengandung teks query
+      post = await Post.find({
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+        ]
+      });
+    } else {
+      // jika tidak ada query, tampilkan semua
+      post = await Post.find();
+    }
+
+    res.send(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
+app.get('/test',async(req,res)=>{
+
+  res.render('testai');
+})
+
+
+app.post('/test',async(req,res)=>{
+
+  let result = await classifyText(req.body.caption);
+  console.log(result);
+  
+  res.send(result) ; 
+})
 
 
 
