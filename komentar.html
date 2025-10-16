@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="asset/favicon.png">
+  <title>Komentar | MyPhysics</title>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari...">
+      <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <button class="login-btn"><a href="login.html">Login</a></button>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+    <a href="penelitian.html"><i>ψ</i> <span>Penelitian</span></a>
+    <a href="topik.html"><i class="fas fa-book"></i> <span>Topik</span></a>
+    <a href="pertanyaan.html"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
+    <a href="#" class="inpage"><i class="fas fa-comment"></i> <span>Komentar</span></a>
+  </div>
+
+  <!-- Konten Utama -->
+  <div class="main-content" id="mainContent">
+    <div class="post-card"> 
+      <div class="post-header">
+        <div class="user-info">
+          <img src="asset/profile.png" alt="User" class="user-avatar">
+          <span class="user-name">User</span>
+        </div>
+        <div class="post-menu">
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="post-dropdown">
+            <a href="#">Laporkan</a>
+          </div>
+        </div>
+      </div>
+      <div class="post-c-content">
+        <img src="asset/sample1.jpg" alt="Gambar Post" class="post-image">
+         <div class="post-content">
+          <h3 class="post-title">Lorem ipsum dolor sit amet</h3>
+          <p class="post-caption">
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+          </p>
+          <div class="post-meta">
+            <span class="post-category"><i class="fa-solid fa-tag"></i> keyword</span>
+            <span class="post-date"><i class="fa-regular fa-calendar"></i> Tanggal </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-actions">
+        <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
+        <button><a href="komentar.html"><i class="fa-regular fa-comment"></i> 12</a></button>
+        <button><i class="fa-solid fa-share"></i> Bagikan</button>
+      </div>
+    </div>
+
+    <div class="comment-section" id="commentSection">
+      <h3>3 Komentar</h3>
+
+      <!-- Komentar utama -->
+      <div class="comment-box">
+        <img src="asset/profile.png" alt="User">
+        <div class="comment-content">
+          <span class="user-name">Rina</span><span class="time">• 2 jam lalu</span>
+          <p>Artikel ini menarik sekali! Aku suka penjelasan tentang efek Doppler-nya.</p>
+          <div class="comment-actions">
+            <button class="like-comment"><i class="fa-regular fa-heart"></i> Suka</button>
+            <button class="reply-btn">Balas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Balasan -->
+      <div class="reply">
+        <div class="comment-box">
+          <img src="asset/profile.png" alt="User">
+          <div class="comment-content">
+            <span class="user-name">Andi</span><span class="time">• 1 jam lalu</span>
+            <p>Betul! Penjelasannya ringkas tapi cukup jelas untuk mahasiswa baru.</p>
+            <div class="comment-actions">
+              <button class="like-comment"><i class="fa-regular fa-heart"></i> Suka</button>
+              <button class="reply-btn">Balas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Komentar kedua -->
+      <div class="comment-box">
+        <img src="asset/profile.png" alt="User">
+        <div class="comment-content">
+          <span class="user-name">Dewi</span><span class="time">• 30 menit lalu</span>
+          <p>Ada referensi tambahan untuk efek Doppler pada astronomi?</p>
+          <div class="comment-actions">
+            <button class="like-comment"><i class="fa-regular fa-heart"></i> Suka</button>
+            <button class="reply-btn">Balas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input komentar baru -->
+      <div class="add-comment">
+        <img src="asset/profile.png" alt="User">
+        <textarea id="commentInput" placeholder="Tulis komentar..."></textarea>
+        <button id="sendCommentBtn">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tombol menu sidebar
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('collapsed');
+    });
+
+    // === SISTEM KOMENTAR ===
+    const commentInput = document.getElementById('commentInput');
+    const sendCommentBtn = document.getElementById('sendCommentBtn');
+    const commentSection = document.getElementById('commentSection');
+
+    sendCommentBtn.addEventListener('click', () => {
+      const text = commentInput.value.trim();
+      if (text === "") return;
+
+      const now = new Date();
+      const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+      const newComment = document.createElement('div');
+      newComment.classList.add('comment-box');
+      newComment.innerHTML = `
+        <img src="asset/profile.png" alt="User">
+        <div class="comment-content">
+          <span class="user-name">Kamu</span><span class="time">• ${time}</span>
+          <p>${text}</p>
+          <div class="comment-actions">
+            <button class="like-comment"><i class="fa-regular fa-heart"></i> Suka</button>
+            <button class="reply-btn">Balas</button>
+          </div>
+        </div>
+      `;
+      commentSection.insertBefore(newComment, document.querySelector('.add-comment'));
+      commentInput.value = "";
+    });
+
+    // Efek tombol like
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.like-comment')) {
+        const btn = e.target.closest('.like-comment');
+        const icon = btn.querySelector('i');
+        btn.classList.toggle('liked');
+        icon.classList.toggle('fa-solid');
+        icon.classList.toggle('fa-regular');
+        icon.style.color = btn.classList.contains('liked') ? '#e74c3c' : '';
+      }
+    });
+
+    // Balas komentar
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('reply-btn')) {
+        const parentComment = e.target.closest('.comment-content');
+        if (parentComment.querySelector('.reply-box')) return;
+
+        const replyBox = document.createElement('div');
+        replyBox.classList.add('reply-box');
+        replyBox.innerHTML = `
+          <textarea placeholder="Tulis balasan..." style="width:100%;background-color:var(--color-4);color:var(--color-3);border:1px solid var(--color-1);border-radius:8px;padding:8px;margin-top:8px;"></textarea>
+          <button class="send-reply" style="margin-top:5px;background-color:var(--color-5);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;">Kirim</button>
+        `;
+        parentComment.appendChild(replyBox);
+      }
+
+      if (e.target.classList.contains('send-reply')) {
+        const replyBox = e.target.closest('.reply-box');
+        const text = replyBox.querySelector('textarea').value.trim();
+        if (text === "") return;
+
+        const now = new Date();
+        const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        const reply = document.createElement('div');
+        reply.classList.add('reply');
+        reply.innerHTML = `
+          <div class="comment-box">
+            <img src="asset/profile.png" alt="User">
+            <div class="comment-content">
+              <span class="user-name">Kamu</span><span class="time">• ${time}</span>
+              <p>${text}</p>
+              <div class="comment-actions">
+                <button class="like-comment"><i class="fa-regular fa-heart"></i> Suka</button>
+                <button class="reply-btn">Balas</button>
+              </div>
+            </div>
+          </div>
+        `;
+        replyBox.parentElement.parentElement.insertAdjacentElement('afterend', reply);
+        replyBox.remove();
+      }
+    });
+  </script>
+</body>
+</html>

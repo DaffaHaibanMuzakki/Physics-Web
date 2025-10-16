@@ -22,6 +22,11 @@ body {
     --color-5: #00b4d8;       
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Navbar */
 .navbar {
     background-color: var(--color-2);
@@ -722,6 +727,133 @@ body {
   }
 }
 
+
+/* ===== KOMENTAR ===== */
+.comment-section {
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border-bottom: 1px solid var(--color-1);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.comment-section h3 {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+
+.comment-box {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.comment-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-content {
+  background-color: var(--color-4);
+  padding: 10px 14px;
+  border-radius: 10px;
+  width: 100%;
+  position: relative;
+}
+
+.comment-content .user-name {
+  font-weight: bold;
+  color: var(--color-3);
+}
+
+.comment-content .time {
+  font-size: 0.75em;
+  color: #aaa;
+  margin-left: 5px;
+}
+
+.comment-content p {
+  margin: 6px 0;
+  font-size: 0.9em;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 6px;
+  font-size: 0.85em;
+}
+
+.comment-actions button {
+  background: none;
+  border: none;
+  color: var(--color-3);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.comment-actions button:hover {
+  color: var(--color-5);
+}
+
+.reply-box {
+  margin-left: 55px;
+  margin-top: 10px;
+}
+
+.add-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.add-comment textarea {
+  flex: 1;
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 8px;
+  resize: none;
+  height: 60px;
+}
+
+.add-comment button {
+  background-color: var(--color-5);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-comment button:hover {
+  opacity: 0.85;
+}
+
+/* Balasan komentar */
+.reply {
+  margin-left: 50px;
+  margin-top: 10px;
+  border-left: 2px solid var(--color-1);
+  padding-left: 10px;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .reply-box {
+    margin-left: 20px;
+  }
+  .reply {
+    margin-left: 25px;
+  }
+}
 
 
 /* ======== MOBILE MODE ======== */

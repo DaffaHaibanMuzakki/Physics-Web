@@ -16,13 +16,14 @@
 <!-- Navbar -->
   <div class="navbar">
     <div class="logo">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
     </div>
     <div class="search-bar">
       <input type="text" placeholder="Cari..." id="searchInput">
       <button id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
-    <button class="login-btn" id="loginBtn">Login</button>
+    <button class="login-btn" id="loginBtn"><a href="login.html">Login</a></button>
   </div>
   <!-- 🔍 Fullscreen Search Overlay -->
   <div class="search-fullscreen" id="searchFullscreen">
@@ -34,87 +35,100 @@
       <!-- Hasil pencarian atau riwayat akan muncul di sini -->
     </div>
   </div>
-  <!--Main-->
-  <div class="container" role="main">
-    <section class="profile-top">
-      <div class="avatar-wrap">
-        <div class="avatar">
-          <img src="" alt="Foto profil" />
-        </div>
-      </div>
 
-      <div class="profile-meta">
-        <div class="top-row">
-          <div class="user-name">
-            <h1>NamaPengguna_123</h1>
-            <div class="muted">· Verified</div>
-          </div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+    <a href="penelitian.html"><i style="font-weight: bolder;">ψ</i> <span>Penelitian</span></a>
+    <a href="topik.html"><i class="fas fa-book"></i> <span>Topik</span></a>
+    <a href="pertanyaan.html"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
+    <a href="#" class="inpage"><i class="fas fa-user"></i> <span>Profil</span></a>
+  </div>
 
-
-        </div>
-
-        <div class="stats" aria-hidden="false">
-          <div class="stat">
-            <strong id="postsCount">48</strong>
-            <span class="muted">Postingan</span>
-          </div>
-
-          <div class="stat">
-            <strong id="followersCount">3.4k</strong>
-            <span class="muted">Pengikut</span>
-          </div>
-
-          <div class="stat">
-            <strong id="followingCount">289</strong>
-            <span class="muted">Mengikuti</span>
+  <div class="main-content" id="mainContent">
+    <!--Main-->
+    <div class="container" role="main">
+      <section class="profile-top">
+        <div class="avatar-wrap">
+          <div class="avatar">
+            <img src="" alt="Foto profil" />
           </div>
         </div>
 
-        <p class="bio" id="bioText">Halo! Saya pembuat konten sains. Membagikan eksperimen sederhana, tips kuliah, dan dokumentasi lab. Konten dibuat untuk tujuan edukasi dan referensi.</p>
-        <div>
-          <div class="btns">
-            <button class="btn">Edit Profil</button>
-            <button class="btn">Message</button>
-            <button class="btn follow" id="followBtn">Follow</button>
-            <button class="btn"><i class="fa-solid fa-gear"></i></button>
-          </div>          
-        </div>
-      </div>
-    </section>
+        <div class="profile-meta">
+          <div class="top-row">
+            <div class="user-name">
+              <h1>NamaPengguna_123</h1>
+              <div class="muted">· Verified</div>
+            </div>
 
-    <section class="posts-area">
-      <div class="posts-add">
-        <h2>Postingan</h2>
-        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
-      </div>
 
-      <div class="post-feed">
-        <div class="post-card"> 
-          <div class="post-c-content">
-            <img src="asset/sample1.jpg" alt="Gambar Post" class="post-image">
+          </div>
 
-            <div class="post-content">
-              <h3 class="post-title">Lorem ipsum dolor sit amet</h3>
-              <p class="post-caption">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-              </p>
-              <div class="post-meta">
-                <span class="post-category"><i class="fa-solid fa-tag"></i> keyword</span>
-                <span class="post-date"><i class="fa-regular fa-calendar"></i> Tanggal </span>
-              </div>
+          <div class="stats" aria-hidden="false">
+            <div class="stat">
+              <strong id="postsCount">48</strong>
+              <span class="muted">Postingan</span>
+            </div>
+
+            <div class="stat">
+              <strong id="followersCount">3.4k</strong>
+              <span class="muted">Pengikut</span>
+            </div>
+
+            <div class="stat">
+              <strong id="followingCount">289</strong>
+              <span class="muted">Mengikuti</span>
             </div>
           </div>
 
-
-          <div class="post-actions">
-            <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
-            <button><i class="fa-regular fa-comment"></i> 12</button>
-            <button><i class="fa-solid fa-share"></i> Bagikan</button>
-            <button><i class="fa-solid fa-trash" style="color: #d10000;"></i></button>
+          <p class="bio" id="bioText">Halo! Saya pembuat konten sains. Membagikan eksperimen sederhana, tips kuliah, dan dokumentasi lab. Konten dibuat untuk tujuan edukasi dan referensi.</p>
+          <div>
+            <div class="btns">
+              <button class="btn">Edit Profil</button>
+              <button class="btn">Message</button>
+              <button class="btn follow" id="followBtn">Follow</button>
+              <button class="btn"><i class="fa-solid fa-gear"></i></button>
+            </div>          
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section class="posts-area">
+        <div class="posts-add">
+          <h2>Postingan</h2>
+          <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <div class="post-feed">
+          <div class="post-card"> 
+            <div class="post-c-content">
+              <img src="asset/sample1.jpg" alt="Gambar Post" class="post-image">
+
+              <div class="post-content">
+                <h3 class="post-title">Lorem ipsum dolor sit amet</h3>
+                <p class="post-caption">
+                  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                </p>
+                <div class="post-meta">
+                  <span class="post-category"><i class="fa-solid fa-tag"></i> keyword</span>
+                  <span class="post-date"><i class="fa-regular fa-calendar"></i> Tanggal </span>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="post-actions">
+              <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
+              <button><a href="komentar.html"><i class="fa-regular fa-comment"></i> 12</a></button>
+              <button><i class="fa-solid fa-share"></i> Bagikan</button>
+              <button><i class="fa-solid fa-pen"></i></button>
+              <button><i class="fa-solid fa-trash" style="color: #d10000;"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <!-- JavaScript -->
@@ -174,8 +188,15 @@
 </script>
   <script>
     const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
     const searchBtn = document.getElementById('searchBtn');
+
+    // Toggle sidebar
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('collapsed');
+    });
 
     // Tombol search
     searchBtn.addEventListener('click', () => {
