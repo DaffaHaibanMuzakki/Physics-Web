@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/profile.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="/asset/favicon.png">
+  <title>MyPhysics - <%= user.username %></title>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <i style="color: #00b4d8;" class="fa-solid fa-atom"></i>
+      <a href="/"><strong>MyPhysics</strong></a>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari..." id="searchInput">
+      <button id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <button class="login-btn" id="loginBtn">Login</button>
+  </div>
+
+  <!-- 🔍 Fullscreen Search Overlay -->
+  <div class="search-fullscreen" id="searchFullscreen">
+    <div class="search-header">
+      <button id="closeSearch"><i class="fa-solid fa-arrow-left"></i></button>
+      <input type="text" id="searchInputFull" placeholder="Telusuri..." autofocus>
+    </div>
+    <div class="search-content" id="searchContent"></div>
+  </div>
+
+  <!-- Main -->
+  <div class="container" role="main">
+    <section class="profile-top">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <img src="/images/istockphoto-1443005803-170667a.jpg" alt="Foto profil">
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <div class="top-row">
+          <div class="user-name">
+            <h1><%= user.username %></h1>
+            <% if (user.role === 'verified') { %>
+              <div class="muted">· Verified</div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="stats" aria-hidden="false">
+          <div class="stat">
+            <strong id="postsCount"><%= user.postsCount || 0 %></strong>
+            <span class="muted">Postingan</span>
+          </div>
+
+          <div class="stat">
+            <strong id="followersCount"><%= user.followersCount || 0 %></strong>
+            <span class="muted">Pengikut</span>
+          </div>
+
+          <div class="stat">
+            <strong id="followingCount"><%= user.followingCount || 0 %></strong>
+            <span class="muted">Mengikuti</span>
+          </div>
+        </div>
+
+        <p class="bio" id="bioText"><%= user.bio || 'Belum menambahkan bio.' %></p>
+
+      <div class="btns">
+  <% if (loggedInUserId && loggedInUserId.toString() === user._id.toString()) { %>
+    <button class="btn">Edit Profil</button>
+    <a style="font-style: none;" href="/logout" class="btn follow" id="logoutBtn">Logout</a>
+    
+  <% } else { %>
+    <button class="btn follow" id="followBtn">Follow</button>
+  <% } %>
+</div>
+
+      </div>
+    </section>
+
+    <!-- Postingan -->
+    <section class="posts-area">
+     <div class="posts-add">
+  <h2>Postingan</h2>
+
+ <% if (loggedInUserId && loggedInUserId.toString() === user._id.toString()) { %>
+  <a href="/create_post" class="add-btn">
+    <i class="fa-solid fa-plus"></i>
+  </a>
+<% } %>
+
+</div>
+
+
+      <div class="post-feed">
+        <% if (posts && posts.length > 0) { %>
+          <% posts.forEach(post => { %>
+            <div class="post-card"> 
+              <div class="post-c-content">
+                <img src="<%= post.image || '/asset/sample1.jpg' %>" alt="Gambar Post" class="post-image">
+
+                <div class="post-content">
+                  <h3 class="post-title"><%= post.title %></h3>
+                  <p class="post-caption"><%= post.caption %></p>
+                  <div class="post-meta">
+                    <span class="post-category"><i class="fa-solid fa-tag"></i> <%= post.category || 'Umum' %></span>
+                    <span class="post-date"><i class="fa-regular fa-calendar"></i> <%= new Date(post.createdAt).toLocaleDateString('id-ID') %></span>
+                  </div>
+                </div>
+              </div>
+
+            <div class="post-actions">
+  <button class="like-btn"><i class="fa-regular fa-heart"></i> <span><%= post.likes || 0 %></span></button>
+  <button><i class="fa-regular fa-comment"></i> <%= post.commentsCount || 0 %></button>
+  <button><i class="fa-solid fa-share"></i> Bagikan</button>
+
+  <% if (loggedInUserId && loggedInUserId.toString() === user._id.toString()) { %>
+    <!-- Tombol Edit -->
+    <a href="/editpost/<%= post._id %>" class="btn edit-btn">
+      <i class="fa-solid fa-pen-to-square"></i> Edit
+    </a>
+
+    <!-- Tombol Hapus (POST method) -->
+    <form action="/deletepost/<%= post._id %>" method="POST" style="display:inline;">
+      <button type="submit" onclick="return confirm('Yakin ingin menghapus postingan ini?');" class="btn delete-btn">
+        <i class="fa-solid fa-trash" style="color: #d10000;"></i> Hapus
+      </button>
+    </form>
+  <% } %>
+</div>
+
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p style="color:#aaa; text-align:center;">Belum ada postingan.</p>
+        <% } %>
+      </div>
+    </section>
+  </div>
+
+  <!-- JS -->
+  <script src="/js/profile.js"></script>
+</body>
+</html>

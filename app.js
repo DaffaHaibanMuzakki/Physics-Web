@@ -53,10 +53,14 @@ const otpGenerator = require('otp-generator');       // Membuat kode OTP acak un
 // ======================================================
 const cheerio = require('cheerio');                  // Manipulasi/membaca HTML di sisi server (untuk scraping)
 const axios = require('axios');
-
+const cors = require("cors");
+const { ref } = require('process');
+const PostData = require('./Scheme/PostData.js');
 // ======================================================
 // 🧩 8. FUNGSI-FUNGSI 
 // ======================================================
+
+
 require('dotenv').config();
 
 // Fungsi promisify upload_stream
@@ -252,6 +256,7 @@ app.use(flash());
 // 🧩 Middleware untuk EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
+app.use(express.static(path.join(__dirname, 'public')));
 // app.use(expressLayouts);
 
 
@@ -259,19 +264,47 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true })); // untuk form HTML (application/x-www-form-urlencoded)
 app.use(express.json());                         // untuk request JSON (application/json)
 
+app.use(cors());
 
 
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "daffahaibanmuzakki@gmail.com",
-    pass: "xwnu kzus mzji clrj",
-  },
-});
+// const transporter = nodemailer.createTransport({
+//     host: "smtp.gmail.com",
+//   port: 587,
+//   secure: false, // true for port 465, false for other ports
+//   auth: {
+//     user: "daffahaibanmuzakki@gmail.com",
+//     pass: "xwnu kzus mzji clrj",
+//   },
+// });
 
+
+async function send_email(otp) {
+    const open = await import('open').then(mod => mod.default);
+  let testAccount = await nodemailer.createTestAccount();
+
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass
+    }
+  });
+
+  let info = await transporter.sendMail({
+    from: '"Tester" <tester@example.com>',
+    to: 'penerima@example.com',
+    subject: 'Percobaan Nodemailer',
+    text: `Halo, Ini kode otpnya ${otp}`
+  });
+
+  const url = nodemailer.getTestMessageUrl(info);
+  console.log('Preview URL:', url);
+
+  // otomatis buka tab baru di browser default
+  if(url) await open(url);
+}
 
 
 
@@ -279,12 +312,73 @@ const transporter = nodemailer.createTransport({
 
 
 app.get('/', async (req, res) => {
-    
+ 
+
+  try {
+    // 1️⃣ Cek status login
+    const isLoggedIn = !!req.session.userId; // true kalau ada session userId
+
+    // 2️⃣ Ambil posting terbaru (misal 10 posting terbaru)
+    const PostsData = await Post.find()
+      .sort({ createdAt: -1 })  // sort descending → terbaru di atas
+      .limit(10)
+     .populate('author', 'username email profilePic');
+    // 3️⃣ Render halaman index dengan info login & data posting
+    res.render('index', {
+      isLoggedIn,
+      posts: PostsData,
+      _id : req.session.userId
+    });
+
+    console.log("Ini data author");
+
+    console.log(PostsData);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Terjadi kesalahan pada server.");
+  }
 });
 
-app.get('/profile', async (req, res) => {
+app.get('/topik', async (req, res) =>{
+  res.render('topik') ;
+})
+app.get('/pertanyaan', async (req, res) =>{
+res.render('pertanyaan') ;
+})
+app.get('/penelitian', async (req, res) =>{
+res.render('penelitian') ;
+})
 
+
+
+app.get('/profile/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // 🔍 Ambil data akun
+    const user = await Account.findById(userId);
+    if (!user) return res.status(404).send("User tidak ditemukan");
+
+    // 🔍 Ambil semua postingan user ini
+    const posts = await Post.find({ author: user._id })
+      .populate("author", "username profilePic")
+      .sort({ createdAt: -1 });
+
+    // 🧠 Kirim data user, posts, dan ID user login (jika ada)
+    res.render("profile", { 
+      user, 
+      posts, 
+      loggedInUserId: req.session.userId || null 
+    });
+
+  } catch (err) {
+    console.error("❌ Error mengambil profil:", err);
+    res.status(500).send("Terjadi kesalahan pada server.");
+  }
 });
+
+
 
 
 app.get('/login', async (req, res) => {
@@ -333,7 +427,7 @@ app.post('/login', async function (req, res) {
     delete req.session.returnTo;
 
     // res.redirect(redirectTo);
-    res.send("Login success");
+    res.redirect("/");
 
   } catch (err) {
     console.error("🔥 [LOGIN] Error:", err.message);
@@ -352,9 +446,9 @@ res.render('signup') ;
 app.post('/signup', async function (req, res) {
 
   try {
-    const nama = "Daffa"
+    const nama = req.body.username
     const email = req.body.email;
-    const password = "tes123"
+    const password = req.body.password
     
     // Cek apakah email sudah terdaftar
     const account = await Account.findOne({ email });
@@ -368,14 +462,16 @@ app.post('/signup', async function (req, res) {
     const otpCode = otpGenerator.generate(6);
     console.log(`🔑 OTP generated for ${email}: ${otpCode}`);
 
-    // Kirim email OTP
-    const info = await transporter.sendMail({
-      from: '"Vyn" <your.email@gmail.com>', // sesuaikan email pengirim
-      to: email, 
-      subject: "Mas Mas", 
-      text: `Kode OTP Anda: ${otpCode}`, 
-    });
-    console.log('📧 OTP email sent:', info.response);
+    // // Kirim email OTP
+    // const info = await transporter.sendMail({
+    //   from: '"Vyn" <your.email@gmail.com>', // sesuaikan email pengirim
+    //   to: email, 
+    //   subject: "Mas Mas", 
+    //   text: `Kode OTP Anda: ${otpCode}`, 
+    // });
+
+    send_email(otpCode);
+    
 
     // Hash password
     const salt = await bcrypt.genSalt();
@@ -454,7 +550,7 @@ app.post('/verify_otp', async function (req, res) {
 
     // req.flash('success', 'The account has been created, please login below');
     // res.redirect('/login');
-    res.send("Succes")
+    res.redirect("/login")
 
   } catch (err) {
     console.error('❌ Error in /verify_otp route:', err);
@@ -602,10 +698,8 @@ app.post('/deletepost/:id', async (req, res) => {
 
 
 
-app.get('/createpost',requireLogin, async(req,res) => {
-
-
-res.render("createpost") ; 
+app.get('/create_post',requireLogin, async(req,res) => {
+res.render("create_post") ; 
 })
 
 
@@ -615,6 +709,7 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
   try {
     console.log("📝 Menerima request:", req.body);
     console.log("File:", req.file);
+
 
     // Validasi
     if (!req.body.title || !req.body.caption) {
@@ -630,12 +725,22 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
     }
 
 
-
     //Olah data dengan AI Python
     let category = await classifyText(req.body.caption);
 
     // Kategorikan keyword
     let keyword = extractKeywords(req.body.caption); 
+
+
+    console.log("Ini merupakan data refrensi");
+   const references = JSON.parse(req.body.references);
+    // Konversi menjadi array string "sitasi + DOI"
+    const referenceStrings = references.map(ref => `${ref.citation}\n${ref.doi}`);
+
+    console.log("Hasil data refrensi");
+    console.log(referenceStrings);
+    
+    
 
     // Buat post
   const newPost = await Post.create({
@@ -645,16 +750,13 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
   image: imageUrl, // bisa pakai URL dummy
   keywords: keyword , // array of string
   category: category.prediction,          // string, bukan array
-  references: [
-    { title: "Referensi 1", url: "https://contoh.com/1" },
-    { title: "Referensi 2", url: "https://contoh.com/2" }
-  ],
+  references: referenceStrings,
   comments: [] // kosong dulu untuk uji coba
 });
 
 
     console.log("✅ Post berhasil dibuat:", newPost);
-    res.render('/', { post: newPost });
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send("Terjadi kesalahan pada server.");
@@ -699,7 +801,157 @@ app.post('/test',async(req,res)=>{
   console.log(result);
   
   res.send(result) ; 
+}) ;
+
+
+
+
+app.get("/get-citation", async (req,res) =>{
+  res.render("get-citation")
 })
+
+// 🔍 Endpoint: ambil metadata dari DOI
+app.post("/get-citation", async (req, res) => {
+  const { doi } = req.body;
+  if (!doi) return res.status(400).json({ error: "DOI is required" });
+
+  try {
+    // Request ke CrossRef API (API resmi untuk metadata DOI)
+    const url = `https://api.crossref.org/works/${encodeURIComponent(doi)}`;
+    const response = await axios.get(url);
+    const data = response.data.message;
+
+    // Ambil data penting
+    const title = data.title?.[0] || "No title";
+    const authors = (data.author || [])
+      .map(a => `${a.given || ""} ${a.family || ""}`.trim())
+      .join(", ");
+    const year = data["published-print"]?.["date-parts"]?.[0]?.[0] ||
+                 data["created"]?.["date-parts"]?.[0]?.[0] ||
+                 "Unknown";
+    const journal = data["container-title"]?.[0] || "Unknown Journal";
+
+    // Buat format sitasi sederhana (APA style)
+    const citation = `${authors} (${year}). ${title}. *${journal}*. https://doi.org/${doi}`;
+
+    res.json({
+      doi,
+      title,
+      authors,
+      year,
+      journal,
+      citation
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to fetch DOI metadata.",
+      details: error.response?.data?.message || error.message
+    });
+  }
+});
+
+app.get('/logout', (req, res) => {
+  // 🔐 Hapus session user
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("❌ Gagal logout:", err);
+      return res.status(500).send("Terjadi kesalahan saat logout");
+    }
+
+    // 🧹 Hapus cookie session dari browser
+    res.clearCookie('connect.sid');
+
+    // 🔁 Arahkan balik ke halaman login atau homepage
+    res.redirect('/'); 
+  });
+});
+
+async function getCommentsTree(postId, parentId = null) {
+  const comments = await Comment.find({ post: postId, parentComment: parentId })
+    .populate("author", "username profilePic")
+    .sort({ createdAt: 1 });
+
+  const results = [];
+
+  for (let comment of comments) {
+    const children = await getCommentsTree(postId, comment._id); // ambil anak-anaknya
+    results.push({
+      ...comment.toObject(),
+      replies: children
+    });
+  }
+
+  return results;
+}
+
+
+app.get("/comment/:postId", async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findById(postId).populate("author", "username profilePic");
+    const comments = await getCommentsTree(postId);
+
+    res.render("komentar", { post, comments, user : req.session.userId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Gagal memuat komentar");
+  }
+});
+
+
+app.post("/comment/:postId", async (req, res) => {
+  const { postId } = req.params;
+  const { text, parentId } = req.body; // parentId opsional
+  const userId = req.session.userId;
+
+  const newComment = await Comment.create({
+    post: postId,
+    author: userId,
+    text,
+    parentComment: parentId || null,
+  });
+
+  res.redirect(`/comment/${postId}`);
+});
+
+
+// ✅ Hapus komentar (hanya oleh pemilik)
+app.post("/comment/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { postId } = req.query;
+    const userId = req.session.userId;
+
+    // Cari komentar
+    const comment = await Comment.findById(id);
+    if (!comment) return res.status(404).send("Komentar tidak ditemukan");
+
+    // Pastikan yang menghapus adalah pemiliknya
+    if (comment.author.toString() !== userId.toString()) {
+      return res.status(403).send("Kamu tidak diizinkan menghapus komentar ini");
+    }
+
+    // Hapus komentar beserta anak-anaknya (jika nested)
+    const deleteCommentTree = async (commentId) => {
+      const children = await Comment.find({ parentId: commentId });
+      for (const child of children) {
+        await deleteCommentTree(child._id);
+      }
+      await Comment.findByIdAndDelete(commentId);
+    };
+
+    await deleteCommentTree(id);
+
+    res.redirect(`/comment/${postId}`);
+  } catch (err) {
+    console.error("❌ Gagal menghapus komentar:", err);
+    res.status(500).send("Terjadi kesalahan saat menghapus komentar");
+  }
+});
+
+
+
+
 
 
 

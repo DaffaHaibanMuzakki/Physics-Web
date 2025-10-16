@@ -1,39 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
   post: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post', // komentar ini milik posting apa
+    ref: "Post",
     required: true
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Account', // siapa yang komentar
+    ref: "Account",
     required: true
   },
   text: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  replies: [
-    {
-      author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      },
-      text: String,
-      createdAt: { type: Date, default: Date.now }
-    }
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now
+  parentComment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Comment",
+    default: null // null kalau komentar utama
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Comment', commentSchema);
+module.exports = mongoose.model("Comment", commentSchema);

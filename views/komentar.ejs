@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="/asset/favicon.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <title>Komentar | MyPhysics</title>
+
+  <!-- 🧮 MathJax 3 (mendukung LaTeX inline & block) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: {
+        pageReady: () => {
+          MathJax.typesetPromise();
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  --comment-bg: #1e1e1e;
+  --comment-reply-bg: #242424;
+  --comment-border: #333;
+  --text-color: #ddd;
+  --accent-color: #00b4d8;
+  --accent-hover: #0096c7;
+}
+
+/* ======= Section komentar ======= */
+.comment-section {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 100%;
+  background: #181818;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-sizing: border-box;
+}
+
+.comment-section h3 {
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* ======= komentar utama ======= */
+.comment-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+  padding: 14px 16px;
+  background-color: var(--comment-bg);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1px solid var(--comment-border);
+  transition: all 0.2s ease;
+}
+
+.comment-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+.comment-box img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+}
+
+.comment-content {
+  flex: 1;
+  color: var(--text-color);
+}
+
+.comment-content .user-name {
+  font-weight: 600;
+  color: var(--accent-color);
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.comment-content p {
+  margin: 5px 0 10px 0;
+  line-height: 1.6;
+  font-size: 0.93rem;
+}
+
+/* tombol balas & lihat balasan */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comment-actions button {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.2s;
+}
+
+.comment-actions button:hover {
+  color: var(--accent-hover);
+}
+
+/* ======= balasan ======= */
+.reply {
+  margin-left: 60px;
+  padding-left: 20px;
+  border-left: 2px solid rgba(0,180,216,0.2);
+  position: relative;
+  display: none;
+}
+
+.reply.active {
+  display: block;
+}
+
+.reply .comment-box {
+  background-color: var(--comment-reply-bg);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+/* textarea balasan */
+.reply-box {
+  display: none;
+  margin-top: 8px;
+}
+
+.reply-box.active {
+  display: block;
+}
+
+.reply-box textarea {
+  width: 100%;
+  background: #2c2c2c;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #eee;
+  padding: 8px;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.reply-box button {
+  margin-top: 6px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.reply-box button:hover {
+  background-color: var(--accent-hover);
+}
+
+/* tombol lihat balasan */
+.toggle-replies-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 0.88rem;
+  margin-left: 60px;
+  margin-bottom: 6px;
+  transition: 0.2s;
+}
+
+.toggle-replies-btn:hover {
+  color: var(--accent-hover);
+}
+
+.reply, .reply-box {
+  transition: all 0.25s ease;
+}
+
+/* ======= Add Comment ======= */
+.add-comment form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.add-comment form .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.add-comment form .user-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-color);
+}
+
+.add-comment form .user-info .user-name {
+  font-weight: 600;
+  color: var(--accent-color);
+  font-size: 1rem;
+}
+
+.add-comment form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: #eee;
+  resize: vertical;
+}
+
+.add-comment form button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 600px) {
+  .add-comment form .user-info {
+    flex-direction: row;
+  }
+
+  .add-comment form .user-info img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .add-comment form textarea {
+    min-height: 100px;
+  }
+}
+
+.formula-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(0,180,216,0.15);
+  border: 1px solid rgba(0,180,216,0.4);
+  color: #00b4d8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.formula-btn:hover {
+  background: #00b4d8;
+  color: white;
+  transform: scale(1.05);
+}
+
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-wrapper textarea {
+  width: 100%;
+  padding-right: 40px; /* biar teks gak nabrak tombol ∑ */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Tambahkan baris ini */
+.modal.active {
+  display: flex; /* 🔹 inilah kuncinya biar modal center */
+}
+
+
+/* 🔧 Konten Modal */
+.modal-content {
+  background: #0d1b2a;
+  color: #e0e0e0;
+  width: 520px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: fadeIn 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #00b4d8 rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar untuk modal */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: #00b4d8;
+  border-radius: 10px;
+}
+
+/* Toolbar tombol simbol */
+#formula-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  justify-content: center;
+  padding: 5px;
+}
+
+/* Tombol di toolbar */
+#formula-toolbar button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  flex: 1 1 auto;
+  min-width: 80px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#formula-toolbar button:hover {
+  background: #00b4d8;
+  color: #fff;
+  border-color: #00b4d8;
+  transform: scale(1.05);
+}
+
+textarea#caption {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 40px 12px 12px; /* beri space kanan untuk tombol ∑ */
+  resize: vertical;
+  box-sizing: border-box;  /* penting biar padding & border dihitung */
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;  /* hilangkan garis focus default */
+}
+
+/* Textarea dan preview */
+.modal-content textarea {
+  width: 100%;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+}
+
+#formula-preview {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  margin-top: 10px;
+  min-height: 50px;
+  border-radius: 8px;
+}
+
+/* Tombol Done & Cancel */
+.modal-content button[type="button"] {
+  background: #00b4d8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.modal-content button[type="button"]:hover {
+  background: #009ac1;
+  transform: scale(1.03);
+}
+
+.modal-content button[onclick="closeFormulaModal()"] {
+  background: rgba(255, 255, 255, 0.05);
+  color: #bbb;
+}
+
+.modal-content button[onclick="closeFormulaModal()"]:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* 🔹 Responsif Tambahan untuk HP */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+    max-height: 80vh;
+    padding: 15px;
+  }
+
+  #formula-toolbar {
+    gap: 4px;
+  }
+
+  #formula-toolbar button {
+    font-size: 11px;
+    padding: 5px 6px;
+    min-width: 65px;
+    flex: 1 1 25%;
+  }
+}
+
+@media (max-width: 400px) {
+  #formula-toolbar button {
+    font-size: 10px;
+    padding: 4px 5px;
+    min-width: 55px;
+    flex: 1 1 30%;
+  }
+
+  .modal-content {
+    padding: 10px;
+    border-radius: 12px;
+  }
+}
+
+
+</style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i>
+        <a href="/"><strong>MyPhysics</strong></a>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari...">
+      <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <button class="login-btn">
+      <% if (typeof user !== 'undefined' && user) { %>
+        <button class="login-btn" id="loginBtn"><a href="/profile/<%-user%>"><i class="bi bi-person-circle"></i></a></button>
+      <% } else { %>
+        <a href="/login">Login</a>
+      <% } %>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="/"><i class="fas fa-home"></i> <span>Home</span></a>
+    <a href="#"><i>ψ</i> <span>Penelitian</span></a>
+    <a href="#"><i class="fas fa-book"></i> <span>Topik</span></a>
+    <a href="#"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
+    <a href="#" class="inpage"><i class="fas fa-comment"></i> <span>Komentar</span></a>
+  </div>
+
+  <!-- Konten Utama -->
+  <div class="main-content" id="mainContent">
+    <div class="post-card"> 
+      <div class="post-header">
+        <div class="user-info">
+          <img src="/images/istockphoto-1443005803-170667a.jpg" alt="User" class="user-avatar">
+          <span class="user-name"><%= post.author.username %></span>
+        </div>
+      </div>
+
+      <div class="post-c-content">
+        <% if (post.image) { %>
+          <img src="<%= post.image %>" alt="Gambar Post" class="post-image">
+        <% } %>
+        <div class="post-content">
+          <h3 class="post-title"><%= post.title %></h3>
+          <p class="post-caption"><%= post.caption %></p>
+          <div class="post-meta">
+            <span class="post-category"><i class="fa-solid fa-tag"></i> <%= post.category %></span>
+            <span class="post-date"><i class="fa-regular fa-calendar"></i> <%= post.createdAt.toLocaleDateString('id-ID') %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bagian Komentar -->
+    <div class="comment-section" id="commentSection">
+      <h3><%= comments.length %> Komentar</h3>
+
+      <!-- Form komentar baru -->
+      <div class="add-comment" style="margin-bottom: 20px;">
+        <form action="/comment/<%= post._id %>" method="POST">
+          <div class="user-info">
+            
+            <% if (typeof user !== 'undefined' && user) { %>
+              <span class="user-name"><%= user.username %></span>
+            <% } else { %>
+              <span class="user-name">Anonim</span>
+            <% } %>
+          </div>
+          <input type="hidden" name="parentId" value="">
+          <div class="textarea-wrapper">
+  <textarea name="text" placeholder="Tulis komentar..." required></textarea>
+  <button type="button" class="formula-btn" onclick="openFormulaModal(this)">∑</button>
+
+</div>
+
+          <button type="submit">Kirim</button>
+        </form>
+      </div>
+
+      <!-- Daftar komentar -->
+      <div class="comment-list">
+        <% function renderComments(list) { %>
+          <% list.forEach(comment => { %>
+            <div class="comment-box">
+              <img src="/images/istockphoto-1443005803-170667a.jpg" alt="User">
+              <div class="comment-content">
+                <span class="user-name"><%= comment.author?.username || 'Anonim' %></span>
+                <p><%= comment.text %></p>
+
+<div class="comment-actions">
+  <button type="button" class="reply-btn">
+    <i class="fa-solid fa-reply"></i> Balas
+  </button>
+
+  <% if (user && comment.author && comment.author._id.toString() === user.toString()) { %>
+    <form action="/comment/delete/<%= comment._id %>?postId=<%= post._id %>" method="POST" style="display:inline;">
+      <button type="submit" class="delete-btn">
+        <i class="fa-solid fa-trash"></i> Hapus
+      </button>
+    </form>
+  <% } %>
+</div>
+
+
+
+              <div class="reply-box">
+  <form action="/comment/<%= post._id %>" method="POST">
+    <input type="hidden" name="parentId" value="<%= comment._id %>">
+    <div class="textarea-wrapper">
+      <textarea name="text" placeholder="Tulis balasan..." required></textarea>
+      <button type="button" class="formula-btn" onclick="openFormulaModal(this)">∑</button>
+
+    </div>
+    <button type="submit">Kirim</button>
+  </form>
+</div>
+
+              </div>
+            </div>
+
+            <% if (comment.replies && comment.replies.length > 0) { %>
+              <button type="button" class="toggle-replies-btn">
+                Lihat <%= comment.replies.length %> Balasan
+              </button>
+              <div class="reply">
+                <%= renderComments(comment.replies) %>
+              </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+
+        <%= renderComments(comments) %>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal">
+  <div class="modal-content">
+    <h3>Formula Editor</h3>
+  <div id="formula-toolbar">
+  <!-- Matematika Dasar -->
+  <button data-latex="\int_{a}^{b} f(x) \\, dx">∫ Integral</button>
+  <button data-latex="\oint f(x) \\, dx">∮ Loop Integral</button>
+  <button data-latex="\iint f(x,y) \\, dx dy">∬ Surface Integral</button>
+  <button data-latex="\iiint f(x,y,z) \\, dx dy dz">∭ Volume Integral</button>
+  <button data-latex="\sum_{n=1}^{\\infty} n">Σ Sum</button>
+  <button data-latex="\prod_{i=1}^{N} i">Π Product</button>
+  <button data-latex="\frac{a}{b}">Fraction</button>
+  <button data-latex="\sqrt{x}">√ Sqrt</button>
+  <button data-latex="\\\left( ... \\\right)">Brackets</button>
+  <button data-latex="\\\left| ... \\\right|">|Absolute|</button>
+  <button data-latex="x_i">Subscript</button>
+  <button data-latex="x^i">Superscript</button>
+  <button data-latex="\lim_{x\\to0}">lim</button>
+  <button data-latex="\frac{d}{dx}">d/dx</button>
+  <button data-latex="\frac{\partial}{\partial x}">∂/∂x</button>
+
+  <!-- Greek Letters -->
+  <button data-latex="\alpha">α</button>
+  <button data-latex="\beta">β</button>
+  <button data-latex="\gamma">γ</button>
+  <button data-latex="\delta">δ</button>
+  <button data-latex="\epsilon">ε</button>
+  <button data-latex="\theta">θ</button>
+  <button data-latex="\lambda">λ</button>
+  <button data-latex="\mu">μ</button>
+  <button data-latex="\pi">π</button>
+  <button data-latex="\sigma">σ</button>
+  <button data-latex="\phi">φ</button>
+  <button data-latex="\psi">ψ</button>
+  <button data-latex="\Omega">Ω</button>
+
+  <!-- Vektor & Operator -->
+  <button data-latex="\\vec{v}">Vector</button>
+  <button data-latex="\\mathbf{F}">Bold F</button>
+  <button data-latex="\\hat{i}">Unit i</button>
+  <button data-latex="\\hat{r}">Unit r</button>
+  <button data-latex="\\dot{x}">ẋ</button>
+  <button data-latex="\\ddot{x}">ẍ</button>
+  <button data-latex="\\infty">∞</button>
+  <button data-latex="^\\circ">° Degree</button>
+
+  <!-- Constants -->
+  <button data-latex="\\hbar">ℏ</button>
+  <button data-latex="\\varepsilon_0">ε₀</button>
+  <button data-latex="\\mu_0">μ₀</button>
+</div>
+
+
+    <textarea id="formula-editor" placeholder="Tulis rumus di sini..."></textarea>
+    <div id="formula-preview"></div>
+    
+    <button type="button" onclick="insertFormulaToEditor()">Done</button>
+
+    <button type="button" onclick="closeFormulaModal()">Cancel</button>
+
+  </div>
+</div>
+
+  <script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('collapsed');
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const replyButtons = document.querySelectorAll(".reply-btn");
+    replyButtons.forEach(btn => {
+      btn.addEventListener("click", function() {
+        const box = btn.closest(".comment-content").querySelector(".reply-box");
+        if (box) box.classList.toggle("active");
+      });
+    });
+
+    const toggleRepliesBtns = document.querySelectorAll(".toggle-replies-btn");
+    toggleRepliesBtns.forEach(btn => {
+      btn.addEventListener("click", function() {
+        const replyContainer = btn.nextElementSibling;
+        if (replyContainer) {
+          replyContainer.classList.toggle("active");
+          btn.textContent = replyContainer.classList.contains("active") 
+            ? "Sembunyikan Balasan" 
+            : `Lihat ${replyContainer.children.length} Balasan`;
+
+          // 🧮 Re-render MathJax setiap kali balasan dibuka
+          if (typeof MathJax !== "undefined") {
+            MathJax.typesetPromise([replyContainer]);
+          }
+        }
+      });
+    });
+
+    // 🧮 Render awal untuk semua komentar
+    if (typeof MathJax !== "undefined") {
+      MathJax.typesetPromise();
+    }
+  });
+  </script>
+
+
+<script>
+let activeTextarea = null; // Menyimpan textarea aktif
+const modal = document.getElementById('modal');
+const formulaEditor = document.getElementById('formula-editor');
+const formulaPreview = document.getElementById('formula-preview');
+
+// 🧮 Buka modal dan simpan textarea target
+function openFormulaModal(button) {
+  activeTextarea = button.closest('.textarea-wrapper').querySelector('textarea');
+  modal.classList.add('active');
+  formulaEditor.value = '';
+  formulaPreview.innerHTML = '';
+  MathJax.typesetPromise([formulaPreview]);
+}
+
+// Tutup modal
+function closeFormulaModal() {
+  modal.classList.remove('active');
+}
+
+// 🧮 Preview rumus dalam modal
+function renderFormulaPreview() {
+  formulaPreview.innerHTML = `$$${formulaEditor.value}$$`;
+  MathJax.typesetPromise([formulaPreview]);
+}
+formulaEditor.addEventListener('input', renderFormulaPreview);
+
+// 🧮 Sisipkan rumus ke textarea komentar/balasan
+function insertFormulaToEditor() {
+  const formula = formulaEditor.value.trim();
+  if (formula && activeTextarea) {
+    const start = activeTextarea.selectionStart;
+    const end = activeTextarea.selectionEnd;
+    const val = activeTextarea.value;
+    activeTextarea.value = val.slice(0, start) + `\n$$${formula}$$\n` + val.slice(end);
+    activeTextarea.focus();
+    activeTextarea.selectionStart = activeTextarea.selectionEnd = start + formula.length + 4;
+    closeFormulaModal();
+    MathJax.typesetPromise();
+  }
+}
+
+// 🧮 Toolbar simbol
+document.querySelectorAll("#formula-toolbar button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const latex = btn.getAttribute("data-latex");
+    const start = formulaEditor.selectionStart;
+    const end = formulaEditor.selectionEnd;
+    const val = formulaEditor.value;
+    formulaEditor.value = val.slice(0, start) + latex + val.slice(end);
+    formulaEditor.focus();
+    formulaEditor.selectionStart = formulaEditor.selectionEnd = start + latex.length;
+    renderFormulaPreview();
+  });
+});
+</script>
+
+
+<script>
+  // Event listener modern untuk semua tombol simbol
+  document.querySelectorAll("#formula-toolbar button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const latex = btn.getAttribute("data-latex");
+      const start = formulaEditor.selectionStart;
+      const end = formulaEditor.selectionEnd;
+      const val = formulaEditor.value;
+      formulaEditor.value = val.slice(0, start) + latex + val.slice(end);
+      formulaEditor.focus();
+      formulaEditor.selectionStart = formulaEditor.selectionEnd = start + latex.length;
+      renderFormulaPreview();
+    });
+  });
+</script>
+</body>
+</html>

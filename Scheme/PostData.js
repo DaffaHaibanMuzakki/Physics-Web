@@ -12,10 +12,7 @@ const post = new mongoose.Schema({
   keywords: [String],
   category: String,
   references: [
-    {
-      title: String,
-      url: String
-    }
+      String
   ],
   // ini relasi ke koleksi Comment
   comments: [

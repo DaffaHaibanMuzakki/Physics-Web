@@ -1,0 +1,985 @@
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--color-2);
+    color: var(--color-3);
+    overflow-x: hidden;
+}
+
+:root {
+    --color-1: #272727;
+    --color-2: #0f0f0f;
+    --color-3: #e1e1e1;
+    --color-4: #2f2f2f; 
+    --color-5: #00b4d8;       
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--color-2);
+    color: var(--color-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border: 0.5px solid var(--color-1);
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--color-3);
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.navbar .logo {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: var(--color-3);
+}
+
+.navbar .search-bar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar .login-btn {
+    background-color: var(--color-1);
+    border: none;
+    color: var(--color-3);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navbar .login-btn a {
+  text-decoration: none;
+  color: var(--color-3);
+}
+
+/* Search bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    max-width: 500px;
+}
+
+.search-bar input[type="text"] {
+    background-color: var(--color-2);
+    color: var(--color-3);
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 10px 0 0 10px;
+    outline: none;
+    border: 0.5px solid var(--color-1);
+}
+
+.search-bar button {
+    background-color: var(--color-1);
+    border: 0.5px solid var(--color-1);
+    color: var(--color-3);
+    padding: 6px 12px;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+
+
+@media (max-width: 600px) {
+  .search-bar {
+    margin-left: auto;
+    max-width: 30px;
+  }
+
+  .search-bar input {
+    display: none;
+  }
+
+  .search-bar.active input {
+    width: 140px;
+    opacity: 1;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+  }
+
+  .search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+}
+
+/* 🔍 Fullscreen Search Overlay */
+.search-fullscreen {
+  position: fixed;
+  inset: 0;
+  background-color: #111;
+  color: white;
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.search-fullscreen.active {
+  display: flex;
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #222;
+}
+
+.search-header input {
+  flex: 1;
+  padding: 8px 12px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 20px;
+  background: #333;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.search-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* Animasi masuk */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--color-2);
+    border: 0.5px solid var(--color-1);
+    width: 200px;
+    height: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    padding: 20px 5px 0px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: width 0.3s ease;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+    align-items: center;
+}
+
+.sidebar a {
+    padding: 12px 17px;
+    text-decoration: none;
+    color: var(--color-3);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s;
+    white-space: nowrap;
+    border-radius: 10px;
+}
+
+.sidebar a:hover {
+    background-color: var(--color-1);
+}
+
+.inpage {
+    background-color: var(--color-1);
+}
+
+.sidebar i {
+    font-size: 18px;
+    min-width: 25px;
+    text-align: center;
+}
+
+.sidebar.collapsed a span {
+    display: none;
+}
+
+/* Konten utama */
+.main-content {
+    margin-top: 60px;
+    margin-left: 200px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.collapsed {
+    margin-left: 70px;
+}
+
+/* ==== CAROUSEL ==== */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.card {
+    position: relative;
+    min-width: 300px;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: var(--color-4);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(60%);
+}
+
+.card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.card-content h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-3);
+}
+
+.card-content p {
+    font-size: 13px;
+    color: var(--color-3);
+    margin: 4px 0;
+}
+
+.source {
+    font-size: 12px;
+    color: var(--color-3);
+}
+
+/* Panah navigasi carousel */
+.arrow {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--color-3);
+    font-size: 10px;
+    padding: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.2s;
+}
+
+.arrow:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.arrow.left {
+    left: 0;
+}
+
+.arrow.right {
+    right: 0;
+}
+
+.truncate {
+    white-space: nowrap;        /* teks tidak turun ke baris baru */
+    overflow: hidden;           /* sembunyikan teks yang kepanjangan */
+    text-overflow: ellipsis;    /* ganti teks terpotong dengan “…” */
+}
+
+/* ===== FEED POST ===== */
+.post-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* Card post */
+.post-card {
+  background-color: var(--color-2);
+  border-bottom: 1px solid var(--color-1);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.post-card:hover {
+    background-color: var(--color-4);
+    cursor: pointer;
+}
+
+/* Header (orang + titik tiga) */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-weight: bold;
+  color: var(--color-3);
+}
+
+.menu-icon {
+  cursor: pointer;
+  color: var(--color-3);
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.menu-icon:hover {
+  background-color: var(--color-1);
+}
+
+/* ===== Gambar Postingan ===== */
+/* Feed layout kecil */
+.post-c-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.post-c-content .post-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  cursor: pointer; /* supaya keliatan bisa diklik */
+}
+
+/* Modal gambar */
+#imageModal {
+  display: none; 
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+#imageModal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 6px;
+}
+
+#imageModal .close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+
+/* Teks di kanan */
+.post-content {
+  flex: 1;           /* ambil sisa space */
+}
+
+
+
+/* Responsif untuk HP */
+@media screen and (max-width: 768px) {
+  .post-c-content {
+    flex-direction: column; /* gambar di atas teks */
+    gap: 10px;
+  }
+
+  .post-c-content .post-image {
+    width: 100%;            /* full-width di HP */
+    height: auto;
+  }
+}
+
+/* Gambar utama */
+.post-image {
+    min-width: 200px;
+  object-fit: cover;
+  aspect-ratio: 5/3;
+}
+
+/* Isi post */
+.post-content {
+  padding: 15px 18px;
+}
+
+.post-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--color-3);
+  margin-bottom: 6px;
+}
+
+.post-caption {
+  font-size: 0.9em;
+  color: var(--color-3);
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+.post-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+/* Tombol interaksi bawah */
+.post-actions {
+    justify-content: end;
+  display: flex;
+  align-items: center;
+  padding: 10px 0 12px;
+}
+
+.post-actions button {
+    margin: 0px 25px 0px 0px;
+  background: none;
+  border: none;
+  color: var(--color-3);
+  cursor: pointer;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.post-actions button:hover {
+  color: var(--color-5);
+}
+
+/* menu titik tiga */
+.post-menu {
+  position: relative;
+}
+
+.post-menu i {
+  cursor: pointer;
+  color: #aaa;
+}
+
+.post-menu:hover .post-dropdown {
+  display: block;
+}
+
+.post-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 20px;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 5px 0;
+  min-width: 100px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.post-dropdown a {
+  display: block;
+  padding: 8px 12px;
+  color: var(--color-3);
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.post-dropdown a:hover {
+  background-color: var(--color-1);
+}
+
+/* Efek tombol love */
+.like-btn.liked i {
+  color: #e74c3c;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .post-c-content {
+        flex-direction: column;
+    }
+    .post-image {
+        height: 200px;
+    }
+    .post-title {
+        font-size: 1em;
+    }
+}
+
+/* Tombol Toggle Filter */
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border: 0.5px solid var(--color-1);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95em;
+  transition: 0.3s ease;
+}
+
+.filter-toggle:hover {
+  background-color: var(--color-5);
+}
+
+.filter-toggle i {
+  font-size: 1em;
+}
+
+/* Panel Filter */
+.filter-bar {
+    position: relative;
+  display: none;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: scaleY(0.95);
+  transform-origin: top;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Saat aktif (tampil) */
+.filter-bar.show {
+  display: flex;
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-3);
+  font-size: 0.9em;
+}
+
+.filter-bar select {
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+/* Tombol Terapkan */
+.filter-bar button {
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border: 0.5px solid var(--color-1);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.filter-bar button:hover {
+  background-color: var(--color-5);
+}
+
+/* Dropdown kategori */
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 20;
+}
+
+#keywordSearch {
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  padding: 6px 8px;
+  border-radius: 6px;
+  width: 180px;
+  font-size: 0.9em;
+}
+
+.dropdown-list {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background-color: var(--color-2);
+  border: 1px solid var(--color-1);
+  border-radius: 6px;
+  width: 180px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 25;
+}
+
+.dropdown-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-list::-webkit-scrollbar-track {
+  background: var(--color-2);
+  border-radius: 10px;
+}
+
+.dropdown-list::-webkit-scrollbar-thumb {
+  background: var(--color-4);
+  border-radius: 10px;
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: var(--color-3);
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-1);
+}
+
+.dropdown-item.active {
+  background-color: var(--color-5);
+  color: var(--color-3);
+}
+
+/* buka dropdown saat fokus */
+.custom-dropdown:focus-within .dropdown-list {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  #keywordSearch, .dropdown-list {
+    width: 100%;
+  }
+  #sortSelect {
+    width: 150px;
+  }
+  .custom-dropdown {
+    width: 150px;
+  }
+  #timeSelect {
+    width: 150px;
+  }
+}
+
+
+
+/* ======== MOBILE MODE ======== */
+@media (max-width: 768px) {
+    .navbar input[type="text"] {
+        width: 50%;
+    }        
+    .sidebar {
+        width: 100%;
+        height: 60px;
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    }
+
+    .sidebar a {
+        width: fit-content;
+        flex-direction: column;
+        justify-content: center;
+        padding: 8px;
+        font-size: 12px;
+        border-radius: 50px;
+    }
+
+    .sidebar a span {
+        display: none; /* Hanya ikon di mobile */
+    }
+
+    .main-content {
+        margin-left: 0;
+        margin-bottom: 60px; /* beri ruang untuk sidebar bawah */
+        padding-bottom: 65px;
+    }
+
+    .sidebar.collapsed {
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: none; /* tombol menu disembunyikan di mobile */
+    }
+    .card {
+    min-width: 250px;
+    height: 150px;
+    }
+}
+
+.post-image {
+  width: 100%;
+  max-width: 400px;   /* batas maksimal lebar */
+  max-height: 200px;  /* batas maksimal tinggi */
+  object-fit: cover;  /* supaya gambar tetap proporsional */
+  border-radius: 10px;
+  margin: 10px auto;
+  display: block;
+}
+
+
+.add-btn {
+  background: #222;
+  color: white;
+  border-radius: 50%;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-btn:hover {
+  background: #333;
+}
+
+/* ===== KOMENTAR ===== */
+.comment-section {
+  background-color: var(--color-2);
+  color: var(--color-3);
+  border-bottom: 1px solid var(--color-1);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.comment-section h3 {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+
+.comment-box {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.comment-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-content {
+  background-color: var(--color-4);
+  padding: 10px 14px;
+  border-radius: 10px;
+  width: 100%;
+  position: relative;
+}
+
+.comment-content .user-name {
+  font-weight: bold;
+  color: var(--color-3);
+}
+
+.comment-content .time {
+  font-size: 0.75em;
+  color: #aaa;
+  margin-left: 5px;
+}
+
+.comment-content p {
+  margin: 6px 0;
+  font-size: 0.9em;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 6px;
+  font-size: 0.85em;
+}
+
+.comment-actions button {
+  background: none;
+  border: none;
+  color: var(--color-3);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.comment-actions button:hover {
+  color: var(--color-5);
+}
+
+.reply-box {
+  margin-left: 55px;
+  margin-top: 10px;
+}
+
+.add-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.add-comment textarea {
+  flex: 1;
+  background-color: var(--color-4);
+  color: var(--color-3);
+  border: 1px solid var(--color-1);
+  border-radius: 8px;
+  padding: 8px;
+  resize: none;
+  height: 60px;
+}
+
+.add-comment button {
+  background-color: var(--color-5);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-comment button:hover {
+  opacity: 0.85;
+}
+
+/* Balasan komentar */
+.reply {
+  margin-left: 50px;
+  margin-top: 10px;
+  border-left: 2px solid var(--color-1);
+  padding-left: 10px;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .reply-box {
+    margin-left: 20px;
+  }
+  .reply {
+    margin-left: 25px;
+  }
+}

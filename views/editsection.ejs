@@ -1,182 +1,697 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Navbar Example</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="/css/verify_otp.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/login-signup.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="asset/favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <title>MyPhysics - Buat Postingan</title>
+  <style>
+    
+   /* Modal (sesuai tema MyPhysics) */
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-  body { font-family: Arial, sans-serif; margin: 20px; }
-  #editor { width: 100%; height: 150px; }
-  #preview { border: 1px solid #ccc; padding: 10px; margin-top: 10px; min-height: 50px; }
-  #toolbar button { margin: 2px; padding: 5px 10px; }
-  .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-  .modal-content { background-color: #fff; margin: 5% auto; padding: 20px; width: 500px; border-radius: 5px; }
-  .modal-content textarea { width: 100%; height: 120px; }
-  .modal-content #formula-preview { border: 1px solid #ccc; padding: 5px; margin-top: 5px; min-height: 50px; }
-</style>
-  </head>
+   /* Toolbar tombol simbol */
+/* 🔧 Modal Container Responsif */
+
+/* --- Preview Caption Style --- */
+/* --- Preview Caption Style --- */
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* tinggi navbar */
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+/* Container utama */
+.auth-container {
+  padding-top: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-left: 15px;  /* biar gak nempel kiri */
+  padding-right: 15px; /* biar gak nempel kanan */
+}
+
+@media (max-width: 600px) {
+  .auth-box {
+    max-width: 95%;
+    padding: 20px;
+  }
+}
+
+.caption-preview {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  margin-top: 0;       /* Ubah margin-top default */
+  border-radius: 8px;
+  color: #e0e0e0;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  line-height: 1.5;
+  font-size: 14px;
+
+  /* animasi toggle */
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+/* Saat tampil */
+.caption-preview.show {
+  opacity: 1;
+  max-height: 400px; 
+  padding: 10px;
+  margin-top: 10px;   /* margin-top baru hanya muncul saat show */
+}
+
+
+
+/* Tombol toggle */
+/* Tombol toggle */
+.preview-toggle {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.preview-toggle button {
+  width: 100%;
+  background: rgba(0, 180, 216, 0.15);
+  color: #00b4d8;
+  border: 1px solid rgba(0, 180, 216, 0.4);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+.preview-toggle button:hover {
+  background: #00b4d8;
+  color: #fff;
+  transform: scale(1.02);
+}
+
+
+.formula-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(0,180,216,0.15);
+  border: 1px solid rgba(0,180,216,0.4);
+  color: #00b4d8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.formula-btn:hover {
+  background: #00b4d8;
+  color: white;
+  transform: scale(1.05);
+}
+
+
+.image-uploader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0; /* beri jarak atas bawah biar gak terlalu mepet */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Tambahkan baris ini */
+.modal.active {
+  display: flex; /* 🔹 inilah kuncinya biar modal center */
+}
+
+
+/* 🔧 Konten Modal */
+.modal-content {
+  background: #0d1b2a;
+  color: #e0e0e0;
+  width: 520px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: fadeIn 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #00b4d8 rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar untuk modal */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: #00b4d8;
+  border-radius: 10px;
+}
+
+/* Toolbar tombol simbol */
+#formula-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  justify-content: center;
+  padding: 5px;
+}
+
+/* Tombol di toolbar */
+#formula-toolbar button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  flex: 1 1 auto;
+  min-width: 80px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#formula-toolbar button:hover {
+  background: #00b4d8;
+  color: #fff;
+  border-color: #00b4d8;
+  transform: scale(1.05);
+}
+
+textarea#caption {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 40px 12px 12px; /* beri space kanan untuk tombol ∑ */
+  resize: vertical;
+  box-sizing: border-box;  /* penting biar padding & border dihitung */
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;  /* hilangkan garis focus default */
+}
+
+/* Textarea dan preview */
+.modal-content textarea {
+  width: 100%;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+}
+
+#formula-preview {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  margin-top: 10px;
+  min-height: 50px;
+  border-radius: 8px;
+}
+
+/* Tombol Done & Cancel */
+.modal-content button[type="button"] {
+  background: #00b4d8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.modal-content button[type="button"]:hover {
+  background: #009ac1;
+  transform: scale(1.03);
+}
+
+.modal-content button[onclick="closeFormulaModal()"] {
+  background: rgba(255, 255, 255, 0.05);
+  color: #bbb;
+}
+
+.modal-content button[onclick="closeFormulaModal()"]:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* 🔹 Responsif Tambahan untuk HP */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+    max-height: 80vh;
+    padding: 15px;
+  }
+
+  #formula-toolbar {
+    gap: 4px;
+  }
+
+  #formula-toolbar button {
+    font-size: 11px;
+    padding: 5px 6px;
+    min-width: 65px;
+    flex: 1 1 25%;
+  }
+}
+
+@media (max-width: 400px) {
+  #formula-toolbar button {
+    font-size: 10px;
+    padding: 4px 5px;
+    min-width: 55px;
+    flex: 1 1 30%;
+  }
+
+  .modal-content {
+    padding: 10px;
+    border-radius: 12px;
+  }
+}
+
+
+/* Animasi muncul */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+    .uploader {
+      width: 260px;
+      height: 260px;
+      border-radius: 12px;
+      border: 2px dashed rgba(255,255,255,0.1);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+    }
+
+    .uploader:hover {
+      border-color: #00b4d8;
+      transform: scale(1.02);
+    }
+
+    .uploader.empty .placeholder { display: flex; flex-direction: column; align-items: center; color: #aaa; }
+    .uploader.has-image .placeholder { display: none; }
+
+    .uploader .img-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .uploader .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 5px 8px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+    }
+
+    .uploader.has-image .remove-btn { display: block; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); }
+
+
+    /* --- Reference Section --- */
+.reference-section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 15px;
+  color: #e0e0e0;
+}
+
+.reference-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap; /* biar tombol turun ke baris baru jika sempit */
+}
+
+.reference-input input {
+  flex: 1 1 auto; /* input bisa mengecil/tumbuh */
+  min-width: 180px; /* batas minimal supaya tidak terlalu sempit */
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.reference-input button {
+  background: rgba(0, 180, 216, 0.15);
+  color: #00b4d8;
+  border: 1px solid rgba(0, 180, 216, 0.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* biar ikon + teks ada jarak */
+}
+
+
+.reference-input button:hover {
+  background: #00b4d8;
+  color: #fff;
+  transform: scale(1.03);
+}
+
+
+/* Daftar sitasi */
+.ref-list {
+  margin-top: 15px;
+  padding-left: 0;
+  max-height: 250px; /* batasi tinggi list */
+  overflow-y: auto; /* scroll vertikal jika banyak */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.ref-item {
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 3px solid #00b4d8;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 🔹 Teks sitasi di pojok kiri bawah */
+.ref-item .citation-text {
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 6px;
+  text-align: left;
+  font-style: italic;
+}
+
+/* DOI link tetap */
+.ref-item small {
+  display: block;
+  color: #aaa;
+  font-size: 12px;
+  text-align: right;
+}
+
+/* Tombol hapus */
+.ref-item button.remove-ref {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.auth-box {
+  background: rgba(13, 27, 42, 0.9); /* jika mau tetap tembus pandang */
+  padding: 30px 40px; /* lebih lega */
+  border-radius: 12px;
+  max-width: 700px; /* lebih lebar dari default */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+  .reference-input input {
+    flex: 1 1 100%; /* input penuh baris */
+  }
+
+  .reference-input button {
+    width: 100%; /* tombol ikut turun */
+  }
+}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <i style="color: #00b4d8;" class="fa-solid fa-atom"></i>
+      <a href="index.html"><strong>MyPhysics</strong></a>
+    </div>
+  </div>
+
+  <!-- BUAT POST SECTION -->
+  <div class="auth-container">
+    <div class="auth-box ">
+      <h2>Edit <span style="color: var(--color-5);">Postingan</span></h2>
+      
+
+      <form action="/editpost/<%-post._id%>" method="post" class="auth-form" >
+
+ 
+
+  <!-- JUDUL -->
+  <div class="input-group">
+    <label for="title"><i class="fa-solid fa-pen"></i></label>
+    <input type="text" value="<%- post.title %>" id="title" name="title" placeholder="Judul posting" required>
+  </div>
+
+  <!-- CAPTION -->
+  <div class="input-group caption-group" style="position: relative; align-items: start;">
+    <label for="caption"><i class="fa-solid fa-align-left"></i></label>
+    <div style="position: relative; width: 100%;">
+      <textarea id="caption" name="caption" rows="5" placeholder="Tulis caption di sini..." required> <%- post.title %></textarea>
+      <button type="button" class="formula-btn" onclick="openFormulaModal()">∑</button>
+    </div>
+  </div>
+
+  <!-- Preview Caption -->
+  <div class="preview-toggle">
+    <button type="button" id="togglePreviewBtn">
+      <i class="fa-solid fa-eye"></i> Show Preview
+    </button>
+  </div>
+  <div id="caption-preview" class="caption-preview hidden">
+    <p style="color: #bbb;">(Preview caption akan muncul di sini)</p>
+  </div>
 
   
 
-
-  <body style="padding-top: 80px;background-image: url('/images/pexels-cookiecutter-1148820.jpg');background-size: cover;">
-    
-    <section>
-        <div class="container container-form  px-3 py-4 my-4">
-
-   <form method="POST" action="/editpost/<%-post._id.toString()%>">
-  <h2 class="text-center mb-4" style="color: #ccc;">Create Post</h2>
-<p><%-post%></p>
-  <div class="mb-3">
-    <label style="color: #ccc;">Title</label>
-    <input name="title" value="<%-post.title%>" class="form-control text-center" placeholder="Enter title" required>
+  <button type="submit" class="auth-btn">Edit Postingan</button>
+</form>
+    </div>
   </div>
 
-  <div class="mb-3">
-  <label style="color: #ccc;">Caption</label>
-  <textarea name="caption" class="form-control text-center" placeholder="Enter caption"><%- post.caption %></textarea>
-</div>
-
-
-
-  <button class="btn btn-primary w-100" type="submit">Post</button>
-</form>
-
-
-      </section>
-      
-<!-- 
-    <script>
-        function imageHandler() {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'quill_upload'); 
-      try {
-        const res = await fetch('https://api.cloudinary.com/v1_1/dfyvw9s66/image/upload', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', data.secure_url);
-      } catch (err) {
-        console.error('Upload error:', err);
-      }
-    };
-  }
-    </script> -->
-   
-
-    <h1>Forum Editor</h1>
-
-<textarea id="editor" placeholder="Tulis konten utama di sini..."></textarea>
-
-<br>
-<button onclick="openFormulaModal()">Insert Formula</button>
-
-<h3>Preview Konten Utama:</h3>
-<div id="preview"></div>
-
-<div id="modal" class="modal">
+  <div id="modal" class="modal">
   <div class="modal-content">
     <h3>Formula Editor</h3>
-    <div id="formula-toolbar">
-       <!-- Matematika Dasar -->
-      <button onclick="insertFormulaSymbol('\\int_{a}^{b} f(x) \\, dx')">∫ Integral</button>
-      <button onclick="insertFormulaSymbol('\\oint f(x) \\, dx')">∮ Loop Integral</button>
-      <button onclick="insertFormulaSymbol('\\iint f(x,y) \\, dx dy')">∬ Surface Integral</button>
-      <button onclick="insertFormulaSymbol('\\\\iiint f(x,y,z) \\, dx dy dz')">∭ Volume Integral</button>
-      <button onclick="insertFormulaSymbol('\\\\sum_{n=1}^{\\\\infty} n')">Σ Sum</button>
-      <button onclick="insertFormulaSymbol('\\\\prod_{i=1}^{N} i')">Π Product</button>
-      <button onclick="insertFormulaSymbol('\\\\frac{a}{b}')">Fraction</button>
-      <button onclick="insertFormulaSymbol('\\\\sqrt{x}')">√ Sqrt</button>
-      <button onclick="insertFormulaSymbol('\\\\left( ... \\\\right)')">(Brackets)</button>
-      <button onclick="insertFormulaSymbol('\\\\left| ... \\\\right|')">|Absolute|</button>
-      <button onclick="insertFormulaSymbol('x_i')">Subscript</button>
-      <button onclick="insertFormulaSymbol('x^i')">Superscript</button>
-      <button onclick="insertFormulaSymbol('\\\\lim_{x\\\\to0}')">lim</button>
-      <button onclick="insertFormulaSymbol('\\\\frac{d}{dx}')">d/dx</button>
-      <button onclick="insertFormulaSymbol('\\\\frac{\\\\partial}{\\\\partial x}')">∂/∂x</button>
+  <div id="formula-toolbar">
+  <!-- Matematika Dasar -->
+  <button data-latex="\int_{a}^{b} f(x) \\, dx">∫ Integral</button>
+  <button data-latex="\oint f(x) \\, dx">∮ Loop Integral</button>
+  <button data-latex="\iint f(x,y) \\, dx dy">∬ Surface Integral</button>
+  <button data-latex="\iiint f(x,y,z) \\, dx dy dz">∭ Volume Integral</button>
+  <button data-latex="\sum_{n=1}^{\\infty} n">Σ Sum</button>
+  <button data-latex="\prod_{i=1}^{N} i">Π Product</button>
+  <button data-latex="\frac{a}{b}">Fraction</button>
+  <button data-latex="\sqrt{x}">√ Sqrt</button>
+  <button data-latex="\\\left( ... \\\right)">Brackets</button>
+  <button data-latex="\\\left| ... \\\right|">|Absolute|</button>
+  <button data-latex="x_i">Subscript</button>
+  <button data-latex="x^i">Superscript</button>
+  <button data-latex="\lim_{x\\to0}">lim</button>
+  <button data-latex="\frac{d}{dx}">d/dx</button>
+  <button data-latex="\frac{\partial}{\partial x}">∂/∂x</button>
 
-      <!-- Greek Letters -->
-      <button onclick="insertFormulaSymbol('\\\\alpha')">α</button>
-      <button onclick="insertFormulaSymbol('\\\\beta')">β</button>
-      <button onclick="insertFormulaSymbol('\\\\gamma')">γ</button>
-      <button onclick="insertFormulaSymbol('\\\\delta')">δ</button>
-      <button onclick="insertFormulaSymbol('\\\\epsilon')">ε</button>
-      <button onclick="insertFormulaSymbol('\\\\theta')">θ</button>
-      <button onclick="insertFormulaSymbol('\\\\lambda')">λ</button>
-      <button onclick="insertFormulaSymbol('\\\\mu')">μ</button>
-      <button onclick="insertFormulaSymbol('\\\\pi')">π</button>
-      <button onclick="insertFormulaSymbol('\\\\sigma')">σ</button>
-      <button onclick="insertFormulaSymbol('\\\\phi')">φ</button>
-      <button onclick="insertFormulaSymbol('\\\\psi')">ψ</button>
-      <button onclick="insertFormulaSymbol('\\\\Omega')">Ω</button>
+  <!-- Greek Letters -->
+  <button data-latex="\alpha">α</button>
+  <button data-latex="\beta">β</button>
+  <button data-latex="\gamma">γ</button>
+  <button data-latex="\delta">δ</button>
+  <button data-latex="\epsilon">ε</button>
+  <button data-latex="\theta">θ</button>
+  <button data-latex="\lambda">λ</button>
+  <button data-latex="\mu">μ</button>
+  <button data-latex="\pi">π</button>
+  <button data-latex="\sigma">σ</button>
+  <button data-latex="\phi">φ</button>
+  <button data-latex="\psi">ψ</button>
+  <button data-latex="\Omega">Ω</button>
 
-      <!-- Vektor & Operator Fisika -->
-      <button onclick="insertFormulaSymbol('\\\\vec{v}')">Vector</button>
-      <button onclick="insertFormulaSymbol('\\\\mathbf{F}')">Bold F</button>
-      <button onclick="insertFormulaSymbol('\\\\hat{i}')">Unit i</button>
-      <button onclick="insertFormulaSymbol('\\\\hat{r}')">Unit r</button>
-      <button onclick="insertFormulaSymbol('\\\\dot{x}')">ẋ</button>
-      <button onclick="insertFormulaSymbol('\\\\ddot{x}')">ẍ</button>
-      <button onclick="insertFormulaSymbol('\\\\infty')">∞</button>
-      <button onclick="insertFormulaSymbol('^\\\\circ')">° Degree</button>
+  <!-- Vektor & Operator -->
+  <button data-latex="\\vec{v}">Vector</button>
+  <button data-latex="\\mathbf{F}">Bold F</button>
+  <button data-latex="\\hat{i}">Unit i</button>
+  <button data-latex="\\hat{r}">Unit r</button>
+  <button data-latex="\\dot{x}">ẋ</button>
+  <button data-latex="\\ddot{x}">ẍ</button>
+  <button data-latex="\\infty">∞</button>
+  <button data-latex="^\\circ">° Degree</button>
 
-      <!-- Constants -->
-      <button onclick="insertFormulaSymbol('\\\\hbar')">ℏ</button>
-      <button onclick="insertFormulaSymbol('\\\\varepsilon_0')">ε₀</button>
-      <button onclick="insertFormulaSymbol('\\\\mu_0')">μ₀</button>
-    </div>
+  <!-- Constants -->
+  <button data-latex="\\hbar">ℏ</button>
+  <button data-latex="\\varepsilon_0">ε₀</button>
+  <button data-latex="\\mu_0">μ₀</button>
+</div>
+
+
     <textarea id="formula-editor" placeholder="Tulis rumus di sini..."></textarea>
     <div id="formula-preview"></div>
-    <button onclick="insertFormulaToEditor()">Done</button>
-    <button onclick="closeFormulaModal()">Cancel</button>
+    
+    <button type="button" onclick="insertFormulaToEditor()">Done</button>
+
+    <button type="button" onclick="closeFormulaModal()">Cancel</button>
+
   </div>
 </div>
 
-    <script>
-const editor = document.getElementById('editor');
-const preview = document.getElementById('preview');
+  
+
+  <script>
+    const uploader = document.getElementById('uploader');
+    const fileInput = document.getElementById('fileInput');
+    const imgWrap = uploader.querySelector('.img-wrap');
+    const removeBtn = uploader.querySelector('.remove-btn');
+
+    function setEmpty(){
+      uploader.classList.remove('has-image');
+      uploader.classList.add('empty');
+      imgWrap.innerHTML = '';
+      fileInput.value = '';
+    }
+
+    function setImage(src, name){
+      uploader.classList.remove('empty');
+      uploader.classList.add('has-image');
+      imgWrap.innerHTML = '';
+
+      const img = document.createElement('img');
+      img.alt = name || 'preview image';
+      img.src = src;
+      imgWrap.appendChild(img);
+    }
+
+    uploader.addEventListener('click', (e)=>{
+      if(e.target === removeBtn) return;
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e)=>{
+      const file = e.target.files && e.target.files[0];
+      if(!file) return setEmpty();
+      if(!file.type.startsWith('image/')) { alert('Pilih file gambar!'); return setEmpty(); }
+
+      const reader = new FileReader();
+      reader.onload = ()=> setImage(reader.result, file.name);
+      reader.readAsDataURL(file);
+    });
+
+    removeBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      setEmpty();
+    });
+
+    setEmpty();
+  </script>
+
+ <script>
+const captionInput = document.getElementById('caption');
+const captionPreview = document.getElementById('caption-preview');
 const modal = document.getElementById('modal');
 const formulaEditor = document.getElementById('formula-editor');
 const formulaPreview = document.getElementById('formula-preview');
 
-// Render preview utama
-function renderMainPreview() {
-  // wrap dengan $$ agar MathJax merender semua formula
-  preview.innerHTML = editor.value.replace(/(\$\$.*?\$\$)/gs, (m) => m);
-  MathJax.typesetPromise([preview]);
+// Render preview caption
+function renderCaptionPreview() {
+  captionPreview.innerHTML = captionInput.value.replace(/(\$\$.*?\$\$)/gs, (m) => m);
+  MathJax.typesetPromise([captionPreview]);
 }
 
-// Modal functions
+captionInput.addEventListener('input', renderCaptionPreview);
+
+// Modal
 function openFormulaModal(){
-  modal.style.display = 'block';
+  modal.classList.add('active');
   formulaEditor.value = '';
   formulaPreview.innerHTML = '';
 }
+
 function closeFormulaModal(){
-  modal.style.display = 'none';
+  modal.classList.remove('active');
 }
 
-// Toolbar insert simbol di formula editor
+
+// Insert simbol ke formula editor
 function insertFormulaSymbol(latex){
   const start = formulaEditor.selectionStart;
   const end = formulaEditor.selectionEnd;
@@ -185,39 +700,125 @@ function insertFormulaSymbol(latex){
   formulaEditor.focus();
   formulaEditor.selectionStart = formulaEditor.selectionEnd = start + latex.length;
   renderFormulaPreview();
+  
 }
 
-// Preview formula
+// Preview formula di modal
 function renderFormulaPreview(){
   formulaPreview.innerHTML = `$$${formulaEditor.value}$$`;
   MathJax.typesetPromise([formulaPreview]);
 }
-
-// Update formula preview saat mengetik
 formulaEditor.addEventListener('input', renderFormulaPreview);
 
-// Insert hasil formula ke editor utama sebagai satu blok
+// **Insert formula ke caption**
 function insertFormulaToEditor(){
-  const formula = formulaEditor.value;
-  if(formula.trim() !== ''){
-    editor.value += `\n$$${formula}$$\n`; // wrap dengan $$ agar MathJax merender
-    renderMainPreview();
-    closeFormulaModal();
+  const formula = formulaEditor.value.trim();
+  if(formula !== ''){
+    captionInput.value += `\n$$${formula}$$\n`;
+    renderCaptionPreview();
+    closeFormulaModal(); // ✅ pakai fungsi close yang pakai .active
   }
 }
 
-// Update preview utama saat mengetik
-editor.addEventListener('input', renderMainPreview);
-renderMainPreview();
+// --- Toggle Preview ---
+const toggleBtn = document.getElementById('togglePreviewBtn');
+const preview = document.getElementById('caption-preview');
+
+toggleBtn.addEventListener('click', () => {
+  const isVisible = preview.classList.toggle('show');
+  if (isVisible) {
+    toggleBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Hide Preview';
+  } else {
+    toggleBtn.innerHTML = '<i class="fa-solid fa-eye"></i> Show Preview';
+  }
+});
+
+// Inisialisasi preview caption
+renderCaptionPreview();
 </script>
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-  </html>
-    
+<script>
+  const referencesInput = document.getElementById("referencesInput");
+  const refInput = document.getElementById("refInput");
+  const addRefBtn = document.getElementById("addRefBtn");
+  const refList = document.getElementById("refList");
+  let references = [];
+
+  function renderReferences() {
+    if (references.length === 0) {
+      refList.innerHTML = `<p style="color:#aaa; font-style:italic;">Belum ada referensi ditambahkan.</p>`;
+    } else {
+      refList.innerHTML = "";
+      references.forEach((ref, i) => {
+        const div = document.createElement("div");
+        div.classList.add("ref-item");
+        div.innerHTML = `
+          <button type="button" class="remove-ref" onclick="removeReference(${i})">✕</button>
+          <div class="citation-text">${ref.citation}</div>
+          <small><a href="https://doi.org/${ref.doi}" target="_blank" style="color:#00b4d8;">${ref.doi}</a></small>
+        `;
+        refList.appendChild(div);
+      });
+    }
+    // Update hidden input agar dikirim ke backend sebagai JSON string
+    referencesInput.value = JSON.stringify(references);
+  }
+
+  function removeReference(index) {
+    references.splice(index, 1);
+    renderReferences();
+  }
+
+  addRefBtn.addEventListener("click", async () => {
+    const doi = refInput.value.trim();
+    if (!doi) return alert("Masukkan DOI atau link terlebih dahulu!");
+
+    try {
+      addRefBtn.disabled = true;
+      addRefBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memuat...';
+
+      const res = await fetch("/get-citation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ doi })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal ambil metadata");
+
+      references.push(data);
+      renderReferences();
+      refInput.value = "";
+
+    } catch (err) {
+      alert("Gagal mengambil referensi: " + err.message);
+    } finally {
+      addRefBtn.disabled = false;
+      addRefBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Tambah';
+    }
+  });
+
+  renderReferences();
+</script>
 
 
+<script>
+  // Event listener modern untuk semua tombol simbol
+  document.querySelectorAll("#formula-toolbar button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const latex = btn.getAttribute("data-latex");
+      const start = formulaEditor.selectionStart;
+      const end = formulaEditor.selectionEnd;
+      const val = formulaEditor.value;
+      formulaEditor.value = val.slice(0, start) + latex + val.slice(end);
+      formulaEditor.focus();
+      formulaEditor.selectionStart = formulaEditor.selectionEnd = start + latex.length;
+      renderFormulaPreview();
+    });
+  });
+</script>
 
-    
+</body>
+</html>
