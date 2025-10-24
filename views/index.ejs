@@ -3,304 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./css/style.css" rel="stylesheet"/>
+  <link href="/css/style.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="asset/favicon.png">
   <title>MyPhysics</title>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-<div id="imageModal">
-  <span class="close">&times;</span>
-  <img src="" id="modalImage">
-</div>
-
-
 <body>
-<!-- Navbar -->
-  <div class="navbar">
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar">
+  <div class="logo">
+    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
     <div class="logo">
-      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-      <div class="logo"><i style="color: #00b4d8;" class="fa-solid fa-atom"></i><a href="index.html"><strong>MyPhysics</strong></a></div>
+      <i style="color: #00b4d8;" class="fa-solid fa-atom"></i>
+      <a href="/"><strong>MyPhysics</strong></a>
     </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Cari..." id="searchInput">
-      <button id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </div>
-    <% if (!isLoggedIn) { %>
+  </div>
+
+  <!-- 🔍 Pencarian langsung (tanpa fullscreen) -->
+  <form class="search-bar" action="/search" method="GET">
+    <input type="text" name="query" placeholder="Cari..." id="searchInput" required>
+    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+  </form>
+
+  <% if (!isLoggedIn) { %>
     <button class="login-btn" id="loginBtn"><a href="/login">Login</a></button>
   <% } else { %>
-    <button class="login-btn" id="loginBtn"><a href="/profile/<%-_id%>"><i class="bi bi-person-circle"></i></a></button>
-   
-  <% } %>
-</div>
-  </div>
-  <!-- 🔍 Fullscreen Search Overlay -->
-  <div class="search-fullscreen" id="searchFullscreen">
-    <div class="search-header">
-      <button id="closeSearch"><i class="fa-solid fa-arrow-left"></i></button>
-      <input type="text" id="searchInputFull" placeholder="Telusuri..." autofocus>
-    </div>
-    <div class="search-content" id="searchContent">
-      <!-- Hasil pencarian atau riwayat akan muncul di sini -->
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <a href="#" class="inpage"><i class="fas fa-home"></i> <span>Home</span></a>
-    <a href="/penelitian"><i style="font-weight: bolder;">ψ</i> <span>Penelitian</span></a>
-    <a href="/topik"><i class="fas fa-book"></i> <span>Topik</span></a>
-    <a href="/pertanyaan"><i class="fas fa-lightbulb"></i> <span>Pertanyaan</span></a>
-  </div>
-
-  <!-- Konten utama -->
-  <div class="main-content" id="mainContent">
-    <!-- Carousel Berita -->
-    <h2 style="margin-bottom: 15px;">Welcome to MyPhysics</h2>
-    <p></p>
-    <!-- <div class="carousel-container">
-      <button class="arrow left">&#10094;</button>
-      <div class="carousel" id="carousel">
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <img src="" alt="">
-          <div class="card-content">
-            <h3 class="truncate">Lorem Ipsum</h3>
-            <p class="truncate">Lorem ipsum dolor sit amet</p>
-            <div class="source">Kategori</div>
-          </div>
-        </div>
-      </div>
-      <button class="arrow right">&#10095;</button>
-    </div> -->
-    <!-- Tombol Filter -->
-    <button id="filterToggleBtn" class="filter-toggle">
-      <i class="fa-solid fa-sliders"></i>
-      <span>Filter</span>
+    <button class="login-btn" id="loginBtn">
+      <a href="/profile/<%-_id%>"><i class="bi bi-person-circle"></i></a>
     </button>
-
-    <!-- Filter Feed -->
-    <div class="filter-bar" id="filterBar">
-      <div class="filter-group">
-        <label>Urutkan:</label>
-        <select id="sortSelect">
-          <option value="trending">Trending</option>
-          <option value="terbaru">Terbaru</option>
-          <option value="terlama">Terlama</option>
-          <option value="like">Like Terbanyak</option>
-        </select>
-      </div>
-
-  
-
-     
-
-      <div class="filter-group keyword">
-        <label>Keyword:</label>
-        <div class="custom-dropdown">
-          <input type="text" id="keywordSearch" placeholder="Cari keyword..." />
-          <div class="dropdown-list" id="keywordList">
-            <div data-value="semua" class="dropdown-item active">Semua</div>
-            <div data-value="topik-a" class="dropdown-item">Topik A</div>
-            <div data-value="topik-b" class="dropdown-item">Topik B</div>
-            <div data-value="topik-c" class="dropdown-item">Topik C</div>
-          </div>
-        </div>
-      </div>
-
-
-      <button id="applyFilterBtn"><i class="fa-solid fa-filter"></i> Terapkan</button>
-    </div>
-
-    <!-- Feed -->
-    <div class="post-feed">
-  <% posts.forEach(post => { %>
-    <div class="post-card"> 
-      <div class="post-header">
-        <div class="user-info">
-          <img src="/images/istockphoto-1443005803-170667a.jpg" alt="User" class="user-avatar">
-          <span class="user-name"> <a href="/profile/<%-post.author._id%>" style="color: inherit; text-decoration: none;">
-    <%= post.author?.username || 'Anonymous' %>
-  </a></span>
-        </div>
-        <div class="post-menu">
-          <i class="fas fa-ellipsis-v"></i>
-          <div class="post-dropdown">
-            <a href="#">Laporkan</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="post-c-content">
-        <% if (post.image) { %>
-          <img src="<%= post.image %>" alt="Gambar Post" class="post-image">
-        <% } %>
-
-        <div class="post-content">
-          <h3 class="post-title"><%- post.title %></h3>
-          <p class="post-caption"><%- post.caption %></p>
-
-         <div class="post-meta">
-  <span class="post-date"><i class="fa-regular fa-calendar"></i> 16/10/2025</span>
-
-  <!-- Keywords/Tags -->
- <div class="post-keywords">
-  <i class="bi bi-tag"></i>
-  <% if (post.keywords && post.keywords.length > 0) { %>
-    <% post.keywords.forEach(keyword => { %>
-      <a href="/keyword/<%= keyword.toLowerCase() %>" class="keyword"><%= keyword %></a>
-    <% }) %>
   <% } %>
 </div>
 
-        </div>
-      </div>
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar" id="sidebar">
+  <a href="/" class="<%= activeCategory === 'Home' ? 'inpage' : '' %>">
+    <i class="fas fa-home"></i> <span>Home</span>
+  </a>
 
-      <div class="post-actions">
-        <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
-        <button><a href="/comment/<%-post._id%>"><i class="fa-regular fa-comment"></i> </a></button>
-        <button><i class="fa-solid fa-share"></i> Bagikan</button>
-      </div>
-    </div>
-  <% }) %>
+  <a href="/penelitian" class="<%= activeCategory === 'Penelitian' ? 'inpage' : '' %>">
+    <i style="font-weight: bolder;">ψ</i> <span>Penelitian</span>
+  </a>
+
+  <a href="/konsep_fisika" class="<%= activeCategory === 'Konsep Fisika' ? 'inpage' : '' %>">
+    <i class="fas fa-book"></i> <span>Topik</span>
+  </a>
+
+  <a href="/pertanyaan" class="<%= activeCategory === 'Pertanyaan' ? 'inpage' : '' %>">
+    <i class="fas fa-lightbulb"></i> <span>Pertanyaan</span>
+  </a>
 </div>
 
-    
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="main-content" id="mainContent">
+  <h2 style="margin-bottom: 15px;">Welcome to MyPhysics</h2>
+<p style="margin-bottom: 20px;">Disini merupakan forum untuk kita berdiskusi terkait fisika dan lain-lain</p>
+  <!-- Filter Keyword -->
+  <div class="filter-group keyword">
+    <label>Keyword:</label>
+    <div class="custom-dropdown">
+      <input type="text" id="keywordSearch" placeholder="Cari keyword..." />
+      <div class="dropdown-list" id="keywordList">
+        <div data-value="semua" class="dropdown-item active">
+          <a href="/keyword/semua" style="text-decoration:none; color:inherit;">Semua</a>
+        </div>
+        <% keywordStats.forEach(kw => { %>
+          <div data-value="<%= kw._id %>" class="dropdown-item">
+            <a href="/keyword/<%= encodeURIComponent(kw._id) %>" style="text-decoration:none; color:inherit;">
+              <%= kw._id %> (<%= kw.count %>)
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    </div>
   </div>
+
+  <!-- ================= FEED ================= -->
+  <div class="post-feed">
+    <% posts.forEach(post => { %>
+      <div class="post-card">
+        <div class="post-header">
+          <div class="user-info">
+            <img src="/images/istockphoto-1443005803-170667a.jpg" alt="User" class="user-avatar">
+            <span class="user-name">
+              <a href="/profile/<%-post.author._id%>" style="color: inherit; text-decoration: none;">
+                <%= post.author?.username || 'Anonymous' %>
+              </a>
+            </span>
+          </div>
+          <div class="post-menu">
+            <i class="fas fa-ellipsis-v"></i>
+            <div class="post-dropdown"><a href="#">Laporkan</a></div>
+          </div>
+        </div>
+
+        <div class="post-c-content">
+          <% if (post.image) { %>
+            <img src="<%= post.image %>" alt="Gambar Post" class="post-image">
+          <% } %>
+
+          <div class="post-content">
+            <h3 class="post-title"><%- post.title %></h3>
+            <p class="post-caption"><%- post.caption %></p>
+
+            <div class="post-meta">
+              <span class="post-date"><i class="fa-regular fa-calendar"></i> 16/10/2025</span>
+              <div class="post-keywords">
+                <i class="bi bi-tag"></i>
+                <% if (post.keywords && post.keywords.length > 0) { %>
+                  <% post.keywords.forEach(keyword => { %>
+                    <a href="/keyword/<%= keyword.toLowerCase() %>" class="keyword"><%= keyword %></a>
+                  <% }) %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-actions">
+          <button class="like-btn"><i class="fa-regular fa-heart"></i> <span>123</span></button>
+          <button><a href="/comment/<%-post._id%>"><i class="fa-regular fa-comment"></i></a></button>
+          <button><i class="fa-solid fa-share"></i> Bagikan</button>
+        </div>
+
+        <% if (post.references && post.references.length > 0) { %>
+          <div class="post-references">
+            <h5>Referensi:</h5>
+            <ul>
+              <% post.references.forEach(ref => { %>
+                <li><a href="<%= ref %>" target="_blank"><%= ref %></a></li>
+              <% }) %>
+            </ul>
+          </div>
+        <% } %>
+      </div>
+    <% }) %>
   </div>
+</div>
 
-
-
-  <!-- JavaScript -->
-  <script>
-  const searchBar = document.querySelector('.search-bar');
-  const searchToggle = document.getElementById('searchToggle');
-  const searchInput = document.getElementById('searchInput');
-
-  searchToggle.addEventListener('click', () => {
-    // Kalau input belum aktif, buka dulu
-    if (!searchBar.classList.contains('active')) {
-      searchBar.classList.add('active');
-      searchInput.focus();
-    } else {
-      // Kalau sudah aktif dan ada teks, lakukan pencarian
-      if (searchInput.value.trim() !== "") {
-        // Ganti bagian ini dengan fungsi pencarian kamu
-        console.log("Mencari:", searchInput.value);
-      } else {
-        // Jika kosong, sembunyikan kembali
-        searchBar.classList.remove('active');
-      }
-    }
-  });
-</script>
+<!-- ================= SCRIPT ================= -->
 <script>
-  const searchFullscreen = document.getElementById('searchFullscreen');
-  const closeSearch = document.getElementById('closeSearch');
-  const searchInputFull = document.getElementById('searchInputFull');
-  const searchContent = document.getElementById('searchContent');
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
 
-  // buka halaman pencarian
-  searchToggle.addEventListener('click', () => {
-    searchFullscreen.classList.add('active');
-    searchInputFull.focus();
-  });
-
-  // tutup halaman pencarian
-  closeSearch.addEventListener('click', () => {
-    searchFullscreen.classList.remove('active');
-    searchInputFull.value = "";
-    searchContent.innerHTML = "";
-  });
-
-  // tekan Enter → tampilkan hasil pencarian
-  searchInputFull.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      const q = searchInputFull.value.trim();
-      if (q) {
-        searchContent.innerHTML = `
-          <p>Mencari: <strong>${q}</strong></p>
-          <p>🔍 Hasil pencarian akan ditampilkan di sini.</p>
-        `;
-      }
-    }
+  // Toggle sidebar
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('collapsed');
   });
 </script>
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const searchBtn = document.getElementById('searchBtn');
 
-    // Toggle sidebar
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('collapsed');
-      mainContent.classList.toggle('collapsed');
-    });
-
-    // Tombol search
-    searchBtn.addEventListener('click', () => {
-      alert('Mencari: ' + searchInput.value);
-    });
-
-    // Tombol login
-    document.getElementById('loginBtn').addEventListener('click', function() {
-      alert('Fitur login belum diaktifkan.');
-    });
-  </script>
-  <script>
-  const carousel = document.getElementById('carousel');
-  const leftBtn = document.querySelector('.arrow.left');
-  const rightBtn = document.querySelector('.arrow.right');
-
-  leftBtn.addEventListener('click', () => {
-    carousel.scrollBy({ left: -320, behavior: 'smooth' });
-  });
-
-  rightBtn.addEventListener('click', () => {
-    carousel.scrollBy({ left: 320, behavior: 'smooth' });
-  });
-</script>
 <script>
   // Efek tombol love
   document.querySelectorAll('.like-btn').forEach(btn => {
@@ -312,76 +169,19 @@
     });
   });
 </script>
+
 <script>
-  const applyFilterBtn = document.getElementById('applyFilterBtn');
-  const sortSelect = document.getElementById('sortSelect');
-  const categorySelect = document.getElementById('keywordSelect');
-  const timeSelect = document.getElementById('timeSelect');
-
-  applyFilterBtn.addEventListener('click', () => {
-    const sort = sortSelect.value;
-    const category = categorySelect.value;
-    const time = timeSelect.value;
-
-    alert(`Filter diterapkan:\nUrutkan: ${sort}\nKategori: ${category}\nWaktu: ${time}`);
-    // Nanti bisa diganti dengan fungsi pemfilteran feed sebenarnya.
-  });
-</script>
-<script>
-  const filterToggleBtn = document.getElementById("filterToggleBtn");
-  const filterBar = document.getElementById("filterBar");
-
-  filterToggleBtn.addEventListener("click", () => {
-    filterBar.classList.toggle("show");
-  });
-
-  // === SCRIPT FILTER KATEGORI ===
+  // Filter Keyword
   const categorySearch = document.getElementById('keywordSearch');
   const categoryList = document.getElementById('keywordList');
-  let selectedCategory = 'semua';
-
   categorySearch.addEventListener('input', () => {
     const filter = categorySearch.value.toLowerCase();
-    const items = categoryList.querySelectorAll('.dropdown-item');
-    items.forEach(item => {
+    categoryList.querySelectorAll('.dropdown-item').forEach(item => {
       const text = item.textContent.toLowerCase();
       item.style.display = text.includes(filter) ? 'block' : 'none';
     });
   });
-
-  categoryList.addEventListener('click', (e) => {
-    if (e.target.classList.contains('dropdown-item')) {
-      categoryList.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      e.target.classList.add('active');
-      selectedCategory = e.target.getAttribute('data-value');
-      categorySearch.value = e.target.textContent;
-      categorySearch.blur();
-    }
-  });
 </script>
 
-<script>
-  // Lightbox sederhana
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("modalImage");
-const closeModal = document.querySelector("#imageModal .close");
-
-document.querySelectorAll(".post-image").forEach(img => {
-  img.addEventListener("click", () => {
-    modal.style.display = "flex";
-    modalImg.src = img.src;
-  });
-});
-
-closeModal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-// Klik di luar gambar juga tutup modal
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) modal.style.display = "none";
-});
-
-</script>
 </body>
 </html>

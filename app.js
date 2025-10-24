@@ -56,6 +56,7 @@ const axios = require('axios');
 const cors = require("cors");
 const { ref } = require('process');
 const PostData = require('./Scheme/PostData.js');
+const { log } = require('util');
 // ======================================================
 // 🧩 8. FUNGSI-FUNGSI 
 // ======================================================
@@ -311,34 +312,108 @@ async function send_email(otp) {
 
 
 
+// ================== ROUTE HOME ==================
 app.get('/', async (req, res) => {
- 
-
   try {
-    // 1️⃣ Cek status login
-    const isLoggedIn = !!req.session.userId; // true kalau ada session userId
+    const isLoggedIn = !!req.session.userId;
 
-    // 2️⃣ Ambil posting terbaru (misal 10 posting terbaru)
+    // Ambil posting terbaru
     const PostsData = await Post.find()
-      .sort({ createdAt: -1 })  // sort descending → terbaru di atas
+      .sort({ createdAt: -1 })
       .limit(10)
-     .populate('author', 'username email profilePic');
-    // 3️⃣ Render halaman index dengan info login & data posting
+      .populate('author', 'username email profilePic');
+
+    // Ambil daftar keyword dan jumlah posting per keyword
+    const keywordStats = await Post.aggregate([
+      { $unwind: "$keywords" },
+      { $group: { _id: "$keywords", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
     res.render('index', {
       isLoggedIn,
       posts: PostsData,
-      _id : req.session.userId
+      _id: req.session.userId,
+      keywordStats,
+      activeCategory: "Semua"
     });
-
-    console.log("Ini data author");
-
-    console.log(PostsData);
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Terjadi kesalahan pada server.");
   }
 });
+
+
+// ================== ROUTE CATEGORY (Topik, Pertanyaan, Penelitian) ==================
+async function renderCategoryPage(req, res, categoryName) {
+  try {
+    const isLoggedIn = !!req.session.userId;
+
+    // Ambil post berdasarkan kategori
+    const posts = await Post.find({ category: categoryName })
+      .sort({ createdAt: -1 })
+      .populate('author', 'username email profilePic');
+
+    // Ambil keyword untuk dropdown / sidebar
+    const keywordStats = await Post.aggregate([
+      { $unwind: "$keywords" },
+      { $group: { _id: "$keywords", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    res.render('index', {
+      isLoggedIn,
+      posts,
+      _id: req.session.userId,
+      keywordStats,
+      activeCategory: categoryName
+    });
+  } catch (err) {
+    console.error(`❌ Error di route kategori ${categoryName}:`, err);
+    res.status(500).send(`Terjadi kesalahan saat mengambil postingan ${categoryName}.`);
+  }
+}
+
+// 🔗 Route kategori
+app.get('/pertanyaan', (req, res) => renderCategoryPage(req, res, 'Pertanyaan'));
+app.get('/penelitian', (req, res) => renderCategoryPage(req, res, 'Penelitian'));
+app.get('/konsep_fisika', (req, res) => renderCategoryPage(req, res, 'Konsep Fisika'));
+
+
+// ======================================================
+// 🏷️ FILTER POST BERDASARKAN KEYWORD
+// ======================================================
+app.get('/keyword/:name', async (req, res) => {
+  try {
+    const keywordName = req.params.name.toLowerCase();
+
+    //Cari semua postingan yang punya keyword itu
+    const posts = await Post.find({ keywords: keywordName })
+      .populate('author', 'username profilePic')
+      .sort({ createdAt: -1 });
+
+    // Ambil semua keyword untuk dropdown tetap tampil
+    const keywordStats = await Post.aggregate([
+      { $unwind: "$keywords" },
+      { $group: { _id: "$keywords", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    res.render('index', {
+      posts,
+      keywordStats,
+      activeKeyword: keywordName, // biar dropdown tahu keyword mana yang sedang aktif
+      isLoggedIn: !!req.session.userId,
+      _id: req.session.userId,
+      activeCategory : "Home"
+    });
+  } catch (err) {
+    console.error('❌ Error mengambil postingan berdasarkan keyword:', err);
+    res.status(500).send('Terjadi kesalahan saat mengambil postingan.');
+  }
+});
+
+
 
 app.get('/topik', async (req, res) =>{
   res.render('topik') ;
@@ -348,14 +423,14 @@ res.render('pertanyaan') ;
 })
 app.get('/penelitian', async (req, res) =>{
 res.render('penelitian') ;
-})
+});
 
 
 
 app.get('/profile/:id', async (req, res) => {
   try {
     const userId = req.params.id;
-
+    const isLoggedIn = !!req.session.userId;
     // 🔍 Ambil data akun
     const user = await Account.findById(userId);
     if (!user) return res.status(404).send("User tidak ditemukan");
@@ -369,7 +444,8 @@ app.get('/profile/:id', async (req, res) => {
     res.render("profile", { 
       user, 
       posts, 
-      loggedInUserId: req.session.userId || null 
+      loggedInUserId: req.session.userId || null , 
+      isLoggedIn,
     });
 
   } catch (err) {
@@ -646,7 +722,7 @@ app.post('/editpost/:id', async (req, res) => {
 
     const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
 
-    res.send("Berhasil datanya diupdate")
+    res.redirect("/")
 
   } catch (err) {
     console.error(err);
@@ -689,7 +765,7 @@ app.post('/deletepost/:id', async (req, res) => {
     // 5. Hapus post
     await Post.findByIdAndDelete(postId);
 
-    res.send('Post deleted successfully');
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -764,28 +840,45 @@ app.post('/createpost',requireLogin, upload.single('image'), async (req, res) =>
 });
 
 app.get('/search', async (req, res) => {
-  const query = req.query.q; // ambil parameter ?q=...
-  
   try {
-    let post = [];
-    if (query) {
-      // cari yang judul atau caption-nya mengandung teks query
-      post = await Post.find({
-        $or: [
-          { title: { $regex: query, $options: 'i' } },
-        ]
-      });
-    } else {
-      // jika tidak ada query, tampilkan semua
-      post = await Post.find();
-    }
+    const searchQuery = req.query.query?.trim().toLowerCase() || "";
 
-    res.send(post);
+    // 🔍 Cari postingan berdasarkan judul yang mengandung query
+    const posts = await Post.find({
+      title: { $regex: searchQuery, $options: "i" }
+    })
+      .populate('author', 'username profilePic')
+      .sort({ createdAt: -1 });
+
+    // 🔹 Tetap ambil keyword list untuk dropdown
+    const keywordStats = await Post.aggregate([
+      { $unwind: "$keywords" },
+      { $group: { _id: "$keywords", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    // 🔹 Ambil postingan terbaru juga (optional)
+    const latestPosts = await Post.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('author', 'username profilePic');
+
+    res.render('index', {
+      posts,
+      keywordStats,
+      latestPosts,
+      searchQuery,
+      activeKeyword: null,
+      isLoggedIn: !!req.session.userId,
+      _id: req.session.userId,
+      activeCategory : "Home"
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
+    console.error("❌ Error saat mencari postingan:", err);
+    res.status(500).send("Terjadi kesalahan saat mencari postingan.");
   }
 });
+
 
 
 
@@ -888,15 +981,32 @@ async function getCommentsTree(postId, parentId = null) {
 app.get("/comment/:postId", async (req, res) => {
   try {
     const { postId } = req.params;
-    const post = await Post.findById(postId).populate("author", "username profilePic");
-    const comments = await getCommentsTree(postId);
 
-    res.render("komentar", { post, comments, user : req.session.userId });
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send("Invalid post ID");
+    }
+
+    // Pastikan post-nya ada
+    const post = await Post.findById(postId).populate("author", "username profilePic");
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+
+    // Ambil semua komentar beserta balasannya secara rekursif
+    const commentsTree = await getCommentsTree(postId);
+
+    res.render("komentar", {
+      post,
+      comments: commentsTree,
+      user: req.session.userId || null
+    });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Gagal memuat komentar");
+    console.error("❌ Error fetching comments:", err);
+    res.status(500).send("Server error saat mengambil komentar");
   }
 });
+
 
 
 app.post("/comment/:postId", async (req, res) => {

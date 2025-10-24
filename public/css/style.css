@@ -376,16 +376,18 @@ body {
 }
 
 /* Card post */
-.post-card {
-  background-color: var(--color-2);
-  border-bottom: 1px solid var(--color-1);
-  overflow: hidden;
-  transition: transform 0.2s;
-}
+/* Nonaktifkan hover putih pada semua post-card */
 .post-card:hover {
-    background-color: var(--color-4);
-    cursor: pointer;
+  background-color: inherit; /* atau bisa pakai warna yang sama dengan container */
+  box-shadow: none; /* jika ada efek bayangan */
 }
+
+/* Pastikan teks atau elemen lain tidak ikut berubah */
+.post-card:hover .post-content,
+.post-card:hover .post-meta {
+  color: inherit;
+}
+
 
 /* Header (orang + titik tiga) */
 .post-header {
@@ -983,3 +985,38 @@ body {
     margin-left: 25px;
   }
 }
+
+
+.post-references {
+   background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 3px solid #00b4d8;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.post-references h5 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.post-references ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.post-references a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.post-references a:hover {
+  text-decoration: underline;
+}
+
